@@ -90,7 +90,18 @@ var CovJSONGridLayer = function (covjson, parameter, displayName) {
   this.paletteExtent = minMax(data.values)
   this._palette = hexToRgb(palette('tol-dv', 256))
   
-  TiledCanvasLayer.call(this, new WorldWind.Sector(-90,90,-180,180), 256, 256, displayName)
+  // data coordinates
+  var lats = this.data.coords.get('y')
+  var lons = this.data.coords.get('x')
+  
+  // extended data bounding box (first and last cell gets extended since we don't have explicit bounds)
+  var latMin = lats.get(0) - (lats.get(1) - lats.get(0)) / 2
+  var latMax = lats.get(lats.size-1) + (lats.get(lats.size-1) - lats.get(lats.size-2)) / 2
+  var lonMin = lons.get(0) - (lons.get(1) - lons.get(0)) / 2
+  var lonMax = lons.get(lons.size-1) + (lons.get(lons.size-1) - lons.get(lons.size-2)) / 2
+  this._bbox = [latMin,lonMin,latMax,lonMax]
+  
+  TiledCanvasLayer.call(this, new WorldWind.Sector(latMin,latMax,lonMin,lonMax), 256, 256, displayName)
 }
 
 CovJSONGridLayer.prototype = Object.create(TiledCanvasLayer.prototype);
@@ -110,11 +121,11 @@ CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
   var lats = this.data.coords.get('y')
   var lons = this.data.coords.get('x')
   
-  // extended data bounding box (first and last cell gets extended since we don't have explicit bounds)
-  var latMin = lats.get(0) - (lats.get(1) - lats.get(0)) / 2
-  var latMax = lats.get(lats.size-1) + (lats.get(lats.size-1) - lats.get(lats.size-2)) / 2
-  var lonMin = lons.get(0) - (lons.get(1) - lons.get(0)) / 2
-  var lonMax = lons.get(lons.size-1) + (lons.get(lons.size-1) - lons.get(lons.size-2)) / 2    
+  // extended data bounding box
+  var latMin = this._bbox[0]
+  var latMax = this._bbox[2]
+  var lonMin = this._bbox[1]
+  var lonMax = this._bbox[3]
   
   // tile coordinates
   var sector = tile.sector
@@ -286,7 +297,9 @@ function eventWindowLoaded() {
       var param = Object.keys(covjson.parameters)[0]
       var covjsonLayer = CovJSONLayer(covjson, param, 'CovJSON');
       wwd.addLayer(covjsonLayer);
-    });   
+      
+      wwd.goTo(new WorldWind.Position(50, 10, 4000000));
+    });
 }
 </script>
 </body>
