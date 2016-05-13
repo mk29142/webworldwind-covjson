@@ -203,7 +203,9 @@ function toAscendingCoords (xndarr) {
   var res = xndarr
   xndarr.coords.forEach(function(v,k) {
     if (v.size > 1 && typeof v.get(0) === 'number' && v.get(0) > v.get(1)) {
-      res = res.xstep({[k]: -1})
+      var spec = {}
+      spec[k] = -1
+      res = res.xstep(spec)
     }
   })
   return res
