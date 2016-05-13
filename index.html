@@ -63,32 +63,37 @@ TiledCanvasLayer.prototype.retrieveTileImage = function (dc, tile, suppressRedra
   }
 }
 
-var CovJSONGridLayer = function (covjson, parameter, displayName) {
-  var data = covjson.ranges[parameter]
-  var coords = {}
-  for (var axisName in covjson.domain.axes) {
-    var axis = covjson.domain.axes[axisName]
-    if ('start' in axis) {
-      var vals = new Float64Array(axis.num)
-      var step = (axis.stop - axis.start) / (axis.num - 1)
-      for (var i=0; i < axis.num; i++) {
-        vals[i] = axis.start + i*step
-      }
-    } else {
-      var vals = axis.values
-    }
-    coords[axisName] = vals
+var CovJSONGridLayer = function (covjson, options) {
+  if (covjson.shape) {
+    var arr = covjson
+  } else {
+	  var data = covjson.ranges[options.parameter]
+	  var coords = {}
+	  for (var axisName in covjson.domain.axes) {
+	    var axis = covjson.domain.axes[axisName]
+	    if ('start' in axis) {
+	      var vals = new Float64Array(axis.num)
+	      var step = (axis.stop - axis.start) / (axis.num - 1)
+	      for (var i=0; i < axis.num; i++) {
+	        vals[i] = axis.start + i*step
+	      }
+	    } else {
+	      var vals = axis.values
+	    }
+	    coords[axisName] = vals
+	  }
+	  var arr = xndarray(data.values, {
+	    shape: data.shape,
+	    names: data.axisNames,
+	    coords: coords
+	  })
   }
-  var arr = xndarray(data.values, {
-    shape: data.shape,
-    names: data.axisNames,
-    coords: coords
-  })
+
   arr = toAscendingCoords(arr)
   this.data = arr
   
-  this.paletteExtent = minMax(data.values)
-  this._palette = hexToRgb(palette('tol-dv', 256))
+  this.paletteExtent = options.paletteExtent || minMax(arr.data)
+  this._palette = hexToRgb(palette('tol-dv', 1000))
   
   // data coordinates
   var lats = this.data.coords.get('y')
@@ -101,7 +106,7 @@ var CovJSONGridLayer = function (covjson, parameter, displayName) {
   var lonMax = lons.get(lons.size-1) + (lons.get(lons.size-1) - lons.get(lons.size-2)) / 2
   this._bbox = [latMin,lonMin,latMax,lonMax]
   
-  TiledCanvasLayer.call(this, new WorldWind.Sector(latMin,latMax,lonMin,lonMax), 256, 256, displayName)
+  TiledCanvasLayer.call(this, new WorldWind.Sector(latMin,latMax,lonMin,lonMax), 256, 256, options.displayName)
 }
 
 CovJSONGridLayer.prototype = Object.create(TiledCanvasLayer.prototype);
@@ -252,7 +257,7 @@ function scale (val, palette, extent) {
   return scaled
 }
 
-var CovJSONVectorLayer = function (covjson, parameter, displayName) {
+var CovJSONVectorLayer = function (covjson, options) {
   // TODO convert CovJSON to GeoJSON and use GeoJSONParser, return RenderableLayer
 }
 
@@ -262,12 +267,12 @@ var CovJSONVectorDomainTypes = [
   'Section'
 ]
 
-var CovJSONLayer = function (covjson, parameter, displayName) {
+var CovJSONLayer = function (covjson, options) {
   var domainType = covjson.domainType || covjson.domain.domainType
   if (domainType === 'Grid') {
-    return new CovJSONGridLayer(covjson, parameter, displayName)
+    return new CovJSONGridLayer(covjson, options)
   } else if (CovJSONVectorDomainTypes.indexOf(domainType) !== -1) {
-    return CovJSONVectorLayer(covjson, parameter, displayName)
+    return CovJSONVectorLayer(covjson, options)
   } else {
     throw new Error('Unsupported CovJSON domain type: ' + domainType)
   }
@@ -300,14 +305,50 @@ function eventWindowLoaded() {
         var covjson = JSON.parse(req.responseText)
 	      // render first parameter
 	      var param = Object.keys(covjson.parameters)[0]
-	      var covjsonLayer = CovJSONLayer(covjson, param, 'CovJSON');
+	      var covjsonLayer = CovJSONLayer(covjson, {
+	        displayName: 'CovJSON Grid',
+	        parameter: param
+	      });
 	      wwd.addLayer(covjsonLayer);
 	      
 	      wwd.goTo(new WorldWind.Position(50, 10, 4000000));
       }
     })
     req.send()
+    
+    
+    var nx = 3000
+    var ny = 3000
+    var griddata = xndarray({
+      length: nx*ny,
+      get: function (i) {
+        return i; 
+      }
+    }, {
+		  shape: [ny,nx],
+		  names: ['y','x'],
+		  coords: {
+		    y: linspace(-70, 70, ny),
+		    x: linspace(-100, 0, nx)
+		  }
+		})
+		var covjsonLayer = new CovJSONGridLayer(griddata, {
+		  displayName: 'Generated Grid',
+		  paletteExtent: [0,nx*ny]
+		})
+    wwd.addLayer(covjsonLayer);
 }
+
+function linspace (start, end, n) {
+  var d = (end - start) / (n - 1 )
+  return {
+    length: n,
+    get: function (i) {
+      return start + i * d
+    }
+  }
+}
+
 </script>
 </body>
 </html>
