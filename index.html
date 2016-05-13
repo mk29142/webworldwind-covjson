@@ -290,16 +290,21 @@ function eventWindowLoaded() {
     wwd.addLayer(new WorldWind.ViewControlsLayer(wwd));
     
     // Add a CovJSON layer
-    fetch('grid.covjson').then(function (resp) {
-      return resp.json();
-    }).then(function (covjson) {
-      // render first parameter
-      var param = Object.keys(covjson.parameters)[0]
-      var covjsonLayer = CovJSONLayer(covjson, param, 'CovJSON');
-      wwd.addLayer(covjsonLayer);
-      
-      wwd.goTo(new WorldWind.Position(50, 10, 4000000));
-    });
+    var req = new XMLHttpRequest()
+    req.open('GET', 'grid.covjson')
+    req.responseType = 'text'
+    req.addEventListener('load', function() {
+      if (req.responseText) {
+        var covjson = JSON.parse(req.responseText)
+	      // render first parameter
+	      var param = Object.keys(covjson.parameters)[0]
+	      var covjsonLayer = CovJSONLayer(covjson, param, 'CovJSON');
+	      wwd.addLayer(covjsonLayer);
+	      
+	      wwd.goTo(new WorldWind.Position(50, 10, 4000000));
+      }
+    })
+    req.send()
 }
 </script>
 </body>
