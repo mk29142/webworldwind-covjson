@@ -11,7 +11,7 @@ wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd))
 wwd.addLayer(new WorldWind.ViewControlsLayer(wwd))
 
 // Add a CovJSON layer
-CovJSON.read('grid.covjson').then(function (cov) {
+CovJSON.read('grid2.covjson').then(function (cov) {
   var firstParamKey = cov.parameters.keys().next().value
   var covjsonLayer = CovJSONLayer(cov, {
     displayName: 'CovJSON Grid',
