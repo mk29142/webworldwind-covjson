@@ -47,19 +47,21 @@ var CovJSONGridLayer = function (cov, options) {
     
     self.paletteExtent = options.paletteExtent || CovUtils.minMaxOfRange(self.range)
     var param = cov.parameters.get(self.paramKey)
-    var category = param.observedProperty.categories;
-    
+    var category = param.observedProperty.categories
+
     //undefined means that the grid data is continous
     //and needs a range of similar colours, otherwise for
     //discrete values palette must have unique colours i.e no shades of the same colour
     if (!category) {
-      self._palette = hexToRgb(palette('cb-Reds', 9))
+      self._palette = hexToRgb(palette('tol-dv', 1000))
     } else {
       var numberOfCategories = category.length
-      self._palette = hexToRgb(palette('tol-rainbow', numberOfCategories))      
-    }
-    self._palette = hexToRgb(palette('tol-dv', 1000))
-    
+      if (numberOfCategories < 12) {
+        self._palette = hexToRgb(palette('tol', numberOfCategories))      
+      } else {
+        self._palette = hexToRgb(palette('tol-rainbow', numberOfCategories))
+      }
+    }    
     var bbox = getGridBbox(self.domain.axes)
     self._bbox = bbox
     
