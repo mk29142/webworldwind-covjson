@@ -37,12 +37,20 @@ function getGridBbox (axes) {
   return [xextent[0], yextent[0], xextent[1], yextent[1]]
 }
 
-
-
+/**
+ * @param {Array} categories 
+ * Checks to see if the categories have a 
+ * prefered colour associated with them.
+ */
 function colourDefaultPresent (categories) {
   return categories[0].preferredColor !== undefined
 }
 
+/**
+ * @param {Array} categories 
+ * creates a new palette with each of the  
+ * categories prefered colours and converts then to RGB.
+ */
 function loadDefaultPalette (categories) {
   var newPalette = new Array(categories.length)
 
@@ -53,6 +61,11 @@ function loadDefaultPalette (categories) {
   return hexToRgb(newPalette);
 }
 
+/**
+ * @param {Array} categories 
+ * Categories don't have prefered colour so we use a 
+ * predefined palette. 
+ */
 function loadNewPalette (categories) {
 
   var numberOfCategories = categories.length
