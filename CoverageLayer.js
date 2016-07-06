@@ -37,6 +37,33 @@ function getGridBbox (axes) {
   return [xextent[0], yextent[0], xextent[1], yextent[1]]
 }
 
+
+
+function colourDefaultPresent (categories) {
+  return categories[0].preferredColor !== undefined
+}
+
+function loadDefaultPalette (categories) {
+  var newPalette = new Array(categories.length)
+
+  for (var i = 0; i < categories.length; i++) {
+    newPalette[i] = categories[i].preferredColor.substr(1);
+  }
+
+  return hexToRgb(newPalette);
+}
+
+function loadNewPalette (categories) {
+
+  var numberOfCategories = categories.length
+      
+  if (numberOfCategories < 12) {
+    return hexToRgb(palette('tol', numberOfCategories))      
+  } else {
+     return hexToRgb(palette('tol-rainbow', numberOfCategories))
+  }
+}
+
 var CovJSONGridLayer = function (cov, options) {
   var self = this
   this.cov = cov
@@ -47,21 +74,21 @@ var CovJSONGridLayer = function (cov, options) {
     
     self.paletteExtent = options.paletteExtent || CovUtils.minMaxOfRange(self.range)
     var param = cov.parameters.get(self.paramKey)
-    var category = param.observedProperty.categories
+    var allCategories = param.observedProperty.categories
 
     //undefined means that the grid data is continous
     //and needs a range of similar colours, otherwise for
     //discrete values palette must have unique colours i.e no shades of the same colour
-    if (!category) {
-      self._palette = hexToRgb(palette('tol-dv', 1000))
+    if (!allCategories) {
+      self.palette = hexToRgb(palette('tol-dv', 1000))
     } else {
-      var numberOfCategories = category.length
-      if (numberOfCategories < 12) {
-        self._palette = hexToRgb(palette('tol', numberOfCategories))      
+
+      if(colourDefaultPresent(allCategories)) {
+        self.palette = loadDefaultPalette(allCategories);  
       } else {
-        self._palette = hexToRgb(palette('tol-rainbow', numberOfCategories))
+        self.palette = loadNewPalette(allCategories);
       }
-    }    
+    }
     var bbox = getGridBbox(self.domain.axes)
     self._bbox = bbox
     
@@ -123,8 +150,8 @@ CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
       var val = this.range.get({y: iLat, x: iLon})
       
       // find the right color in the palette
-      var colorIdx = scale(val, this._palette, this.paletteExtent)
-      var color = this._palette[colorIdx]
+      var colorIdx = scale(val, this.palette, this.paletteExtent)
+      var color = this.palette[colorIdx]
       if (!color) {
         // out of scale
         continue
@@ -149,6 +176,9 @@ function wrapNum (x, range, includeMax) {
   return x === max && includeMax ? x : ((x - min) % d + d) % d + min
 }
 
+/**
+ * @param {Array} colors array of hex colours without '#'.
+ */
 function hexToRgb (colors) {
   return colors.map(function(color) {
     var c = parseInt(color, 16)
