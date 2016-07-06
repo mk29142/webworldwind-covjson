@@ -18,40 +18,41 @@ CovJSON.read('grid2.covjson').then(function (cov) {
     paramKey: firstParamKey
   })
   wwd.addLayer(covjsonLayer)
-  
+  window.layer = covjsonLayer
+
   wwd.goTo(new WorldWind.Position(50, 10, 4000000))
 })
 
 // add a computed coverage layer
-function linspace (start, end, n) {
-  var d = (end - start) / (n - 1 )
-  return {
-    length: n,
-    get: function (i) {
-      return start + i * d
-    }
-  }
-}
+// function linspace (start, end, n) {
+//   var d = (end - start) / (n - 1 )
+//   return {
+//     length: n,
+//     get: function (i) {
+//       return start + i * d
+//     }
+//   }
+// }
 
-var nx = 3000
-var ny = 3000
-var griddata = xndarray({
-  length: nx*ny,
-  get: function (i) {
-    return i
-  }
-}, {
-  shape: [ny,nx],
-  names: ['y','x'],
-  coords: {
-    y: linspace(-70, 70, ny),
-    x: linspace(-100, 0, nx)
-  }
-})
+// var nx = 3000
+// var ny = 3000
+// var griddata = xndarray({
+//   length: nx*ny,
+//   get: function (i) {
+//     return i
+//   }
+// }, {
+//   shape: [ny,nx],
+//   names: ['y','x'],
+//   coords: {
+//     y: linspace(-70, 70, ny),
+//     x: linspace(-100, 0, nx)
+//   }
+// })
 
-var covjsonLayer = new CovJSONGridLayer(CovUtils.fromXndarray(griddata), {
-  displayName: 'Generated Grid',
-  paletteExtent: [0,nx*ny]
-})
-wwd.addLayer(covjsonLayer)
+// var covjsonLayer = new CovJSONGridLayer(CovUtils.fromXndarray(griddata), {
+//   displayName: 'Generated Grid',
+//   paletteExtent: [0,nx*ny]
+// })
+// wwd.addLayer(covjsonLayer)
 

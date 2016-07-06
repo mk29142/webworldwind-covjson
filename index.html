@@ -15,6 +15,55 @@
         Your browser does not support HTML5 Canvas.
     </canvas>
 </div>
+<style type='text/css'>
+  .my-legend .legend-title {
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 90%;
+    }
+  .my-legend .legend-scale ul {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    }
+  .my-legend .legend-scale ul li {
+    display: block;
+    float: left;
+    width: 50px;
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 80%;
+    list-style: none;
+    }
+  .my-legend .legend-bar {
+    /*background: linear-gradient(to right, red, yellow);*/
+    height: 15px;
+    width: 250px;
+    }
+  .my-legend a {
+    color: #777;
+    }
+  .my-legend {
+    display: none;
+  }
+</style>
+
+<div class='my-legend'>
+    <div class='legend-title'></div>
+    <div class='legend-scale'>
+     <div class='legend-bar'></div>
+      <ul class='legend-labels'>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+      </ul>
+    </div>
+</div>
+
 <script src="TiledCanvasLayer.js"></script>
 <script src="CoverageLayer.js"></script>
 <script src="main.js"></script>
