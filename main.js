@@ -24,8 +24,6 @@ CovJSON.read('grid.covjson').then(function (cov) {
   })
   wwd.addLayer(covjsonLayer)
 
-  
-
   /*
     depending on dataset : createContinousLegend or createCategoricalLegend
   */
