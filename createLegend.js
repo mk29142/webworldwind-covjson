@@ -10,14 +10,18 @@ function changeHTMLText (id, text) {
 	span.innerText = txt.textContent;	
 }
 
-function changeLegendTitle (cov, paramKey) {
+function changeTitleAndUnits (cov, paramKey) {
 
 	var param = cov.parameters.get(paramKey)
 	var title = param.observedProperty.label.en
-	var units = param.unit.label.en
+	var categories = param.observedProperty.categories
 
 	changeHTMLText("legend-title", title)
-	changeHTMLText("legend-units", units)
+
+	if(!categories){
+		var units = param.unit.label.en
+		changeHTMLText("legend-units", "(" + units + ")")
+	}
 
 }
 
@@ -28,6 +32,16 @@ function changeLegendScale(cov, minMax) {
 	
 }
 
+function addCategoricalElement(tag, colour) {
+	var ul = document.getElementById("labels");
+	var li = document.createElement("li");
+	var span = document.createElement("span");
+	span.setAttribute("style", "background-color: " + colour + ";")
+	li.appendChild(span)
+	li.appendChild(document.createTextNode(tag));
+	ul.appendChild(li); 
+}
+
 function createContinousLegend (cov, layer) {
 
 	var paramKey = cov.parameters.keys().next().value
@@ -35,7 +49,7 @@ function createContinousLegend (cov, layer) {
 	var legend = document.getElementById("my-legend")
 	var minMax = CovUtils.minMaxOfRange(layer.range) 
 
-	changeLegendTitle(cov,paramKey)
+	changeTitleAndUnits(cov,paramKey)
 
 	changeLegendScale(cov, minMax)
 
@@ -54,8 +68,32 @@ function createContinousLegend (cov, layer) {
 	}
 
 	legendBar.style.background = "linear-gradient(to top," + colourString + ")"
-
 }
+
+function createCategoricalLegend (cov, layer, categories) { 
+
+	var paramKey = cov.parameters.keys().next().value
+
+	changeTitleAndUnits(cov, paramKey)	
+
+	if (colourDefaultPresent(categories)) {  
+		// extract everything from cov (for loop)
+		for (var i = 0; i < categories.length; i++) {
+			addCategoricalElement(categories[i].label.en, categories[i].preferredColor)
+		}
+	} else {
+		// associate each colour in palette array with name which can be extracted from categories (for loop)
+		console.log("here")		
+	}
+
+	// for(var i = 0; i < categories.length; i++) {
+
+	// 	console.log(categories[i].label.en)
+	// 	console.log(categories[i].preferredColor)
+	// }
+	// 	console.log(layer.palette)
+}
+
 
 
 

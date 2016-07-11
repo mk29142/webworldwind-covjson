@@ -10,8 +10,13 @@ wwd.addLayer(new WorldWind.CompassLayer())
 wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd))
 wwd.addLayer(new WorldWind.ViewControlsLayer(wwd))
 
-function onLayerLoad (cov, layer) {
-  createContinousLegend(cov, layer)
+function onLayerLoad (cov, layer, categories) {
+
+  if (!categories) {
+    createContinousLegend(cov, layer)
+  } else {
+    createCategoricalLegend(cov, layer, categories)
+  }
 }
 
 // Add a CovJSON layer
@@ -23,10 +28,6 @@ CovJSON.read('grid.covjson').then(function (cov) {
     onload: onLayerLoad 
   })
   wwd.addLayer(covjsonLayer)
-
-  /*
-    depending on dataset : createContinousLegend or createCategoricalLegend
-  */
 
   window.layer = covjsonLayer
 

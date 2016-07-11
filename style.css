@@ -6,7 +6,7 @@
     font-size: 90%;
     height: 50%
     }
-  #my-legend #legend-scale ul {
+  #my-legend #legend-scale-continous ul {
     margin: 0;
     padding: 0;
     top: 0;
@@ -14,14 +14,14 @@
     text-align: right;  
     }
 
-  #legend-scale {
+  #legend-scale-continous {
     position: relative;
     height: 250px;
     width: 15px;
     float: left;
     text-align: bottom;
 
-  }
+    }
   #start {
     position: absolute;
     display: block;
@@ -48,7 +48,6 @@
     }
 
   #my-legend #legend-bar {    
-    background: linear-gradient(to top, yellow, red);
     height: 250px;
     width: 15px;
     text-align: left;
@@ -59,4 +58,29 @@
     color: #777;
     bottom: 0;
     right: 0;
+    padding-right: 1cm;
+    }
+
+  #my-legend .legend-scale-categorical ul {
+    margin: 0;
+    margin-bottom: 5px;
+    padding: 0;
+    float: left;
+    list-style: none;
+    }
+  #my-legend .legend-scale-categorical ul li {
+    font-size: 80%;
+    list-style: none;
+    margin-left: 0;
+    line-height: 18px;
+    margin-bottom: 2px;
+    }
+  #my-legend ul.legend-labels li span {
+    display: block;
+    float: left;
+    height: 16px;
+    width: 30px;
+    margin-right: 5px;
+    margin-left: 0;
+    border: 1px solid #999;
     }
