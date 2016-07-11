@@ -77,21 +77,16 @@ function createCategoricalLegend (cov, layer, categories) {
 	changeTitleAndUnits(cov, paramKey)	
 
 	if (colourDefaultPresent(categories)) {  
-		// extract everything from cov (for loop)
 		for (var i = 0; i < categories.length; i++) {
 			addCategoricalElement(categories[i].label.en, categories[i].preferredColor)
 		}
 	} else {
-		// associate each colour in palette array with name which can be extracted from categories (for loop)
-		console.log("here")		
+		for(var i = 0; i < categories.length; i++) {
+			var colour = createRGBString(layer.palette[i]) 
+			addCategoricalElement(categories[i].label.en, colour)
+		}		
 	}
 
-	// for(var i = 0; i < categories.length; i++) {
-
-	// 	console.log(categories[i].label.en)
-	// 	console.log(categories[i].preferredColor)
-	// }
-	// 	console.log(layer.palette)
 }
 
 
