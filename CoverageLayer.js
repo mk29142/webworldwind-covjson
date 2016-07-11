@@ -49,7 +49,7 @@ function colourDefaultPresent (categories) {
 /**
  * @param {Array} categories 
  * creates a new palette with each of the  
- * categories prefered colours and converts then to RGB.
+ * categories prefered colours and converts then to RGB format.
  */
 function loadDefaultPalette (categories) {
   var newPalette = new Array(categories.length)
@@ -77,7 +77,17 @@ function loadNewPalette (categories) {
   }
 }
 
+/**
+ * @param {Coverage} cov
+ * @param {Array} options
+ * Constructor for CovJSONLayer. Initialises the palette for the categories   
+ * based on whether they are continous or categorical. And if they are categorical, it will 
+ * create the palette based on its prefered colour. If it doesn't have prefered colur 
+ * a default palette will be picked. 
+ * Creates the grid bounding box and adds everything to the canvas.
+ */
 var CovJSONGridLayer = function (cov, options) {
+
   options.onload = options.onload || function () {}
   var self = this
   this.cov = cov
@@ -193,7 +203,8 @@ function wrapNum (x, range, includeMax) {
 }
 
 /**
- * @param {Array} colors array of hex colours without '#'.
+ * @param {Array} colors 
+ * array of hex colours without '#'.
  */
 function hexToRgb (colors) {
   return colors.map(function(color) {
