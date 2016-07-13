@@ -17,9 +17,7 @@ function addDropDownTime(date, time) {
 
 function addTimeOnClick(map) {
 	var dateArr = document.getElementById("dateStamps")
-	var timeStamps = document.getElementById("timeStamps")
-
-	timeStamps.options.length = 0; 
+	var timeStamps = document.getElementById("timeStamps") 
 
 	dateArr.addEventListener("change" , function() {
 
