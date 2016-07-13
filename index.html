@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/covjson-reader/0.14/covjson-reader.min.js"></script>
     <script src="http://worldwindserver.net/webworldwind/worldwindlib.js" type="text/javascript"></script>
     <script src="https://google.github.io/palette.js/palette.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -30,9 +31,31 @@
     </div>
 </div>
 
+<div id="timeUI"> 
+    <div id="time">Time</div>
+    <select id="dateStamps">
+        <!-- <option value="test"> asdjakd </option> -->
+    </select>
+    <select id="timeStamps">
+        <option selected=> 
+        </option>
+    </select>  
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#timeStamps").children('option:gt(0)').hide();
+        $("#dateStamps").change(function() {
+            $("#timeStamps").children('option').hide();
+            $("#timeStamps").children("option[value^=" + $(this).val() + "]").show()
+        })
+    })
+</script>
+
 <script src="TiledCanvasLayer.js"></script>
 <script src="CoverageLayer.js"></script>
 <script src="createLegend.js"></script>
+<script src="createTimeUI.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

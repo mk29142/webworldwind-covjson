@@ -17,10 +17,11 @@ function onLayerLoad (cov, layer, categories) {
   } else {
     createCategoricalLegend(cov, layer, categories)
   }
+  addDropDown(cov)
 }
 
 // Add a CovJSON layer
-CovJSON.read('grid.covjson').then(function (cov) {
+CovJSON.read('multiTime.covjson').then(function (cov) {
   var firstParamKey = cov.parameters.keys().next().value
   var covjsonLayer = CovJSONLayer(cov, {
     displayName: 'CovJSON Grid',
@@ -31,7 +32,7 @@ CovJSON.read('grid.covjson').then(function (cov) {
 
   window.layer = covjsonLayer
 
-  wwd.goTo(new WorldWind.Position(50, 10, 4000000))
+  // wwd.goTo(new WorldWind.Position(50, 10, 4000000))
 })
 
 // add a computed coverage layer

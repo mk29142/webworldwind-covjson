@@ -41,8 +41,10 @@ function changeTitleAndUnits (cov, paramKey) {
 	changeHTMLText("legend-title", title)
 
 	if(!categories){
+		if(param.unit !== undefined) {
 		var units = param.unit.label.en
 		changeHTMLText("legend-units", "(" + units + ")")
+	    }
 	}
 
 }
