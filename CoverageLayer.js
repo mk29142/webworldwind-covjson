@@ -72,8 +72,8 @@ function loadNewPalette (categories) {
       
   if (numberOfCategories < 12) {
     return hexToRgb(palette('tol', numberOfCategories))      
-  } else {
-     return hexToRgb(palette('tol-rainbow', numberOfCategories))
+  } else 
+{     return hexToRgb(palette('tol-rainbow', numberOfCategories))
   }
 }
 
