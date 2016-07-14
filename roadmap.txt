@@ -1,0 +1,7 @@
+
+TODO:
+
+1) Extract and load values for different
+   time scales. (Hopefully done by end of this week)
+
+   
