@@ -36,15 +36,15 @@ function loadTimeBasedValues(cov, map) {
 	var dateStamps = document.getElementById("dateStamps")
 	var paramKey = cov.parameters.keys().next().value
 
-	// var date = function(map,value) {
-	// 	for( var prop in map ) {
-	//         if( map.hasOwnProperty( prop ) ) {
-	// 	        if(map[prop].includes(value)) {
-	// 	        	return prop
-	// 	        }
-	//         }
-	//     }
-	// }
+	var date = function(map,value) {
+		for( var prop in map ) {
+	        if( map.hasOwnProperty( prop ) ) {
+		        if(map[prop].includes(value)) {
+		        	return prop
+		        }
+	        }
+	    }
+	}
 
 	timeStamps.addEventListener("change", function() {
 
