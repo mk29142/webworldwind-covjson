@@ -1,5 +1,8 @@
-var TiledCanvasLayer = function (sector, tileWidth, tileHeight, displayName) {
-  WorldWind.TiledImageLayer.call(this, sector, new WorldWind.Location(90, 180), 19, "image/x-canvas", displayName, tileWidth, tileHeight);
+var TiledCanvasLayer = function (sector, tileWidth, tileHeight, cachePath) {
+  if(!cachePath) {
+    cachePath = +new Date()
+  }
+  WorldWind.TiledImageLayer.call(this, sector, new WorldWind.Location(90, 180), 19, "image/x-canvas", cachePath, tileWidth, tileHeight);
 }
 
 TiledCanvasLayer.prototype = Object.create(WorldWind.TiledImageLayer.prototype);

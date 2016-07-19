@@ -77,6 +77,16 @@ function loadNewPalette (categories) {
   }
 }
 
+var date = function(map,value) {
+  for( var prop in map ) {
+        if( map.hasOwnProperty( prop ) ) {
+          if(map[prop].includes(value)) {
+            return prop
+          }
+        }
+    }
+  }
+
 /**
  * @param {Coverage} cov
  * @param {Array} options
@@ -92,33 +102,38 @@ var CovJSONGridLayer = function (cov, options) {
   var self = this
   this.cov = cov
   this.paramKey = options.paramKey
-  Promise.all([cov.loadDomain(), cov.loadRange(this.paramKey)]).then(function (res) {
-    self.domain = res[0]
-    self.range = res[1]
-    
-    self.paletteExtent = options.paletteExtent || CovUtils.minMaxOfRange(self.range)
-    var param = cov.parameters.get(self.paramKey)
-    var allCategories = param.observedProperty.categories
+  var constraints = {}
 
-    //undefined means that the grid data is continous
-    //and needs a range of similar colours, otherwise for
-    //discrete values palette must have unique colours i.e no shades of the same colour
-    if (!allCategories) {
-      self.palette = hexToRgb(palette('tol-dv', 1000))
-    } else {
+  if(options.time) {
+    constraints.t = options.time
+  }
 
-      if(colourDefaultPresent(allCategories)) {
-        self.palette = loadDefaultPalette(allCategories);  
+  cov.subsetByValue(constraints).then(function(subsetCov) {
+    Promise.all([subsetCov.loadDomain(), subsetCov.loadRange(self.paramKey)]).then(function (res) {
+      self.domain = res[0]
+      self.range = res[1]
+      
+      self.paletteExtent = options.paletteExtent || CovUtils.minMaxOfRange(self.range)
+      var param = cov.parameters.get(self.paramKey)
+      var allCategories = param.observedProperty.categories
+      //undefined means that the grid data is continous
+      //and needs a range of similar colours, otherwise for
+      //discrete values palette must have unique colours i.e no shades of the same colour
+      if (!allCategories) {
+        self.palette = hexToRgb(palette('tol-dv', 1000))
       } else {
-        self.palette = loadNewPalette(allCategories);
+        if(colourDefaultPresent(allCategories)) {
+          self.palette = loadDefaultPalette(allCategories);  
+        } else {
+          self.palette = loadNewPalette(allCategories);
+        }
       }
-    }
-    var bbox = getGridBbox(self.domain.axes)
-    self._bbox = bbox
-
-    options.onload(cov, self, allCategories)
-    
-    TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256, options.displayName)
+      var bbox = getGridBbox(self.domain.axes)
+      self._bbox = bbox
+      options.onload(cov, self, allCategories)
+      
+      TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256)
+    })
   })
 }
 

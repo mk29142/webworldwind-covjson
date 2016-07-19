@@ -15,22 +15,8 @@ function addDropDownTime(date, time) {
 	dateTime.appendChild(option)
 }
 
-function getKey(map, value) {
 
-	for( var prop in map ) {
-		console.log(prop)
-        if( map.hasOwnProperty( prop ) ) {
-        	console.log(map[prop])
-        }
-        // 	if( map[prop] === value ){
-        // // 		console.log(prop)
-        		console.log(map[prop].includes(value))
-        // 	}
-       	// }
-    }
-}
-
-function loadTimeBasedValues(cov, map) {
+function loadTimeBasedValues(cov, map, layer) {
 
 	var timeStamps = document.getElementById("timeStamps") 
 	var dateStamps = document.getElementById("dateStamps")
@@ -49,25 +35,21 @@ function loadTimeBasedValues(cov, map) {
 	timeStamps.addEventListener("change", function() {
 
 		var value = this.value
-		console.log(date(map,value))
-		cov.subsetByValue({t: date(map,value) + "T" + value }).then(function(subsetCov) {
-			subsetCov.loadRange(paramKey).then(function(range) {
+		var fullDate = date(map,value) + "T" + value
+		var wwd = getWWD()
 
-				cov.loadDomain().then(function(domain) {
-					var xaxis = domain.axes.get("x").values
-					var yaxis = domain.axes.get("y").values
-				
-					var values = []
+		//console.log(wwd)
+		wwd.removeLayer(layer)
 
-					for(var xs in xaxis) {
-						for (var ys in yaxis) {
-							
-							values.push(range.get({x: xs, y: ys}))
-						}
-					}
-				})
-			})
-		})
+		var newLayer = CovJSONLayer(cov, {
+		    paramKey: paramKey,
+		    onload: onLayerLoad,
+		    time: fullDate
+		  })
+
+		wwd.addLayer(newLayer)
+		wwd.redraw()
+
 	})
 }
 
@@ -85,6 +67,7 @@ function addTimeOnClick(cov, map) {
 		timeStamps.add(emptyOption)
 
 		var values = map[this.value]
+		console.log(values)
 
 		for(var i = 0; i < values.length; i++) {
 
@@ -96,7 +79,7 @@ function addTimeOnClick(cov, map) {
 }
 
 
-function addDropDown(cov) {
+function addDropDown(cov, layer) {
 
 
 	var dateStamps = document.getElementById("dateStamps")
@@ -120,8 +103,10 @@ function addDropDown(cov) {
 			    addDropDownTime(date, time)
 			}
 			if(date in dateToTimesMap) {
+				console.log(date)
 				dateToTimesMap[date].push(time)
 			} else {
+				console.log(date)
 				dateToTimesMap[date] = [time]
 			}
 			var dateTag = document.getElementById(date)
@@ -130,7 +115,8 @@ function addDropDown(cov) {
 				addDropDownDate(date)
 			} 
 		}
+			// console.log(dateToTimesMap.length)
 		addTimeOnClick(cov, dateToTimesMap)
-		loadTimeBasedValues(cov, dateToTimesMap)
+		loadTimeBasedValues(cov, dateToTimesMap, layer)
 	})	
 }
