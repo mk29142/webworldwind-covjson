@@ -31,15 +31,14 @@
           wwd.addLayer(layer)
         }).load()
 
-      timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"}).on('change', function (time) {
+      timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"}).on("change", function (time) {)
         wwd.removeLayer(layer)
-        layer = createLayer(cov, time)
+        layer = createLayer(cov, time.value)
           .on('load', function () {
             wwd.addLayer(layer)
           }).load()
       })
     })
-
   })
 
   function createLayer (cov, time) {
@@ -68,7 +67,7 @@ function onLayerLoad (cov, layer, categories) {
   cov.loadDomain().then(function(dom) {
     var values = dom.axes.get("t")
     if(values) {
-      addDropDown(cov, layer)  
+      addDropDown(cov, layer)
     }
   })
 }
@@ -129,4 +128,3 @@ CovJSON.read('multiTime.covjson').then(function (cov) {
 //   paletteExtent: [0,nx*ny]
 // })
 // wwd.addLayer(covjsonLayer)
-

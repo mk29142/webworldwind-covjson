@@ -4,7 +4,7 @@ function TimeSelector(values, options) {
 	this._timeId = options.timeId
 	this._dateToTimeMap = {}
 	var self = this
- 
+
  	var dateStamps = document.getElementById(this._dateId)
  	var timeStamps = document.getElementById(this._timeId)
 
@@ -18,7 +18,7 @@ function TimeSelector(values, options) {
 		    date = values[i].substr(0,endIndex)
 		    time = values[i].substr(endIndex+1)
 		}
-		console.log(this._dateToTimeMap)
+		// console.log(this._dateToTimeMap)
 		if(date in this._dateToTimeMap) {
 			this._dateToTimeMap[date].push(time)
 		} else {
@@ -31,20 +31,24 @@ function TimeSelector(values, options) {
 	this._fillDateOptions(Object.keys(this._dateToTimeMap))
 	this._fillTimeOptions(this._dateToTimeMap)
 
-	// this.fire("change")
+	var date //= dateStamps.options[dateStamps.selectedIndex].value
 
+	var time //= timeStamps.options[timeStamps.selectedIndex].value
+
+
+	// this.fire("change", {value: date + "T" + time})
 
 	dateStamps.addEventListener("change" , function() {
-		
+
 		self._fillTimeOptions(self._dateToTimeMap)
 
-		var date = this.value
+	  date = this.value
+	  time = timeStamps.options[timeStamps.selectedIndex].value
+
+		self.fire("change", {value: date + "T" + time})
 
 		timeStamps.addEventListener("change", function() {
-
-			var time = this.value
-
-			this.fire("change", {value: date + "T" + time})
+			self.fire("change", {value: date + "T" + time})
 		})
 
 		// attach change listeners to select elements
@@ -55,9 +59,8 @@ function TimeSelector(values, options) {
 }
 
 TimeSelector.prototype._fillDateOptions = function(dateArr) {
-	
+
 	var dateStamps = document.getElementById(this._dateId)
-	console.log(dateArr)
 
 	for(var i = 0; i < dateArr.length; i++) {
 		var option = document.createElement("option")
@@ -68,7 +71,7 @@ TimeSelector.prototype._fillDateOptions = function(dateArr) {
 }
 TimeSelector.prototype._fillTimeOptions = function (map) {
 
-	var dateStamps = document.getElementById(this._dateId)	
+	var dateStamps = document.getElementById(this._dateId)
 	var currDateVal = dateStamps.options[dateStamps.selectedIndex].value
 	var timeStamps = document.getElementById(this._timeId)
 
