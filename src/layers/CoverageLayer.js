@@ -77,16 +77,6 @@ function loadNewPalette (categories) {
   }
 }
 
-var date = function(map,value) {
-  for( var prop in map ) {
-        if( map.hasOwnProperty( prop ) ) {
-          if(map[prop].includes(value)) {
-            return prop
-          }
-        }
-    }
-  }
-
 /**
  * @param {Coverage} cov
  * @param {Array} options
@@ -97,24 +87,34 @@ var date = function(map,value) {
  * Creates the grid bounding box and adds everything to the canvas.
  */
 var CovJSONGridLayer = function (cov, options) {
-
+  this.options = options
   options.onload = options.onload || function () {}
   var self = this
   this.cov = cov
   this.paramKey = options.paramKey
+
+}
+
+CovJSONGridLayer.prototype = Object.create(TiledCanvasLayer.prototype);
+
+mixin(EventMixin, CovJSONGridLayer)
+
+CovJSONGridLayer.prototype.load = function () {
+  var self = this
+
   var constraints = {}
 
-  if(options.time) {
-    constraints.t = options.time
+  if(this.options.time) {
+    constraints.t = this.options.time
   }
 
-  cov.subsetByValue(constraints).then(function(subsetCov) {
+  this.cov.subsetByValue(constraints).then(function(subsetCov) {
     Promise.all([subsetCov.loadDomain(), subsetCov.loadRange(self.paramKey)]).then(function (res) {
       self.domain = res[0]
       self.range = res[1]
       
-      self.paletteExtent = options.paletteExtent || CovUtils.minMaxOfRange(self.range)
-      var param = cov.parameters.get(self.paramKey)
+      self.paletteExtent = self.options.paletteExtent || CovUtils.minMaxOfRange(self.range)
+      var param = self.cov.parameters.get(self.paramKey)
       var allCategories = param.observedProperty.categories
       //undefined means that the grid data is continous
       //and needs a range of similar colours, otherwise for
@@ -125,19 +125,18 @@ var CovJSONGridLayer = function (cov, options) {
         if(colourDefaultPresent(allCategories)) {
           self.palette = loadDefaultPalette(allCategories);  
         } else {
-          self.palette = loadNewPalette(allCategories);
+          self.palette = loadNewPalette(allCategories)
         }
       }
       var bbox = getGridBbox(self.domain.axes)
       self._bbox = bbox
-      options.onload(cov, self, allCategories)
-      
+
       TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256)
+
+      self.fire('load')
     })
   })
 }
-
-CovJSONGridLayer.prototype = Object.create(TiledCanvasLayer.prototype);
 
 CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
   var ctx = canvas.getContext('2d')

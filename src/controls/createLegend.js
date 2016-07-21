@@ -139,9 +139,18 @@ function createCategoricalLegend (cov, layer, categories) {
 			addCategoricalElement(categories[i].label.en, colour)
 		}		
 	}
-
 }
 
+function createLegend (cov, layer, paramKey) {
+	var param = cov.parameters.get(paramKey)
+	var allCategories = param.observedProperty.categories
+
+	if (!allCategories) {
+    return createContinousLegend(cov, layer)
+  } else {
+    return createCategoricalLegend(cov, layer, allCategories)
+  }
+}
 
 
 
