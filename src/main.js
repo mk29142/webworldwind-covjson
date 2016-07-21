@@ -31,7 +31,7 @@
           wwd.addLayer(layer)
         }).load()
 
-      timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"}).on("change", function (time) {)
+      timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"}).on("change", function (time) {
         wwd.removeLayer(layer)
         layer = createLayer(cov, time.value)
           .on('load', function () {
