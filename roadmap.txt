@@ -1,7 +1,14 @@
 
 TODO:
 
-1) Extract and load values for different
-   time scales. (Hopefully done by end of this week)
+1) create UI for different verticle axis plots.
+2) prettify legend with board plus other css modifications.
+3)
 
-   
+Completed:
+
+- Extract and load values for different
+  time scales.
+
+- Refractored to separate out the different logic of the time UI and
+  legend into different classes.
