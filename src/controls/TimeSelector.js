@@ -31,12 +31,8 @@ function TimeSelector(values, options) {
 	this._fillDateOptions(Object.keys(this._dateToTimeMap))
 	this._fillTimeOptions(this._dateToTimeMap)
 
-	var date //= dateStamps.options[dateStamps.selectedIndex].value
-
-	var time //= timeStamps.options[timeStamps.selectedIndex].value
-
-
-	this.fire("change", {value: date + "T" + time})
+	var date
+	var time
 
 	dateStamps.addEventListener("change" , function() {
 

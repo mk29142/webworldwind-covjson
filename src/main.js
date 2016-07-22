@@ -18,34 +18,44 @@
   var layer
   var timeSelector
 
-  CovJSON.read('testdata/multiTime.covjson').then(function (cov) {
+  CovJSON.read('testdata/grid2.covjson').then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
 
-      var values = dom.axes.get("t").values
+      var timeAxis = dom.axes.get("t")
 
-
-      timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"})
-
-      var dateStamps = document.getElementById("dateStamps")
-      var timeStamps = document.getElementById("timeStamps")
-
-      var date = dateStamps.options[dateStamps.selectedIndex].value
-
-      var time = timeStamps.options[timeStamps.selectedIndex].value
-
-      layer = createLayer(cov, date + "T" + time)
-      .on('load', function () {
-        wwd.addLayer(layer)
-      }).load()
-
-      timeSelector.on("change", function (time) {
-        wwd.removeLayer(layer)
-        layer = createLayer(cov, time.value)
+      if(!timeAxis) {
+        layer = createLayer(cov)
           .on('load', function () {
             wwd.addLayer(layer)
           }).load()
-      })
+      }else {
+
+        var values = timeAxis.values
+
+        timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"})
+
+        var dateStamps = document.getElementById("dateStamps")
+        var timeStamps = document.getElementById("timeStamps")
+
+        var date = dateStamps.options[dateStamps.selectedIndex].value
+        var time = timeStamps.options[timeStamps.selectedIndex].value
+
+        layer = createLayer(cov, date + "T" + time)
+        .on('load', function () {
+          wwd.addLayer(layer)
+        }).load()
+
+        timeSelector.on("change", function (time) {
+          wwd.removeLayer(layer)
+          layer = createLayer(cov, time.value)
+          .on('load', function () {
+            wwd.addLayer(layer)
+          }).load()
+        })
+      }
+
+
     })
   })
 
