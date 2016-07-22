@@ -1,9 +1,7 @@
 
 TODO:
 
-1) create UI for different verticle axis plots.
-2) prettify legend with board plus other css modifications.
-3)
+1) create UI for different verticle axis.
 
 Completed:
 
@@ -12,3 +10,7 @@ Completed:
 
 - Refractored to separate out the different logic of the time UI and
   legend into different classes.
+
+- Tablet friendly
+
+- prettify legend with boarder plus other css modifications.

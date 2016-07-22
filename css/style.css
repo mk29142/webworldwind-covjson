@@ -6,48 +6,8 @@
     font-size: 90%;
     height: 50%
     }
-  #my-legend #legend-scale-continous ul {
-    margin: 0;
-    padding: 0;
-    top: 0;
-    list-style: none;
-    text-align: right;  
-    }
 
-  #legend-scale-continous {
-    position: relative;
-    height: 250px;
-    width: 15px;
-    float: left;
-    text-align: bottom;
-
-    }
-  #start {
-    position: absolute;
-    display: block;
-    float: left;
-    height: 10px;
-    width: 50px;
-    margin-bottom: 6px;
-    font-size: 80%;
-    bottom: 0;
-    }
-
-  #finish {
-    position: absolute; 
-    display: block;
-    float: left;
-    height: 50px;
-    width: 50px;
-    margin-bottom: 6px;
-    text-align: left;
-    font-size: 80%;
-    bottom: 0;
-    list-style: none;
-    top: 0;
-    }
-
-  #my-legend #legend-bar {    
+  #my-legend #legend-bar {
     height: 250px;
     width: 15px;
     text-align: left;
@@ -56,31 +16,24 @@
   #my-legend {
     position: absolute;
     color: #777;
-    bottom: 0;
-    right: 0;
+    top: 250px;
+    right: 10px;
     padding-right: 1cm;
+    padding-left: 1cm;
+    padding-bottom: 0.5cm;
+    border:1px solid black;
+    border-radius: 1em;
+    background-color: rgba(255,255,255,0.7);
     }
 
-  #my-legend .legend-scale-categorical ul {
-    margin: 0;
-    margin-bottom: 5px;
-    padding: 0;
-    float: left;
-    list-style: none;
-    }
-  #my-legend .legend-scale-categorical ul li {
-    font-size: 80%;
-    list-style: none;
-    margin-left: 0;
-    line-height: 18px;
-    margin-bottom: 2px;
-    }
-  #my-legend ul.legend-labels li span {
-    display: block;
-    float: left;
-    height: 16px;
-    width: 30px;
-    margin-right: 5px;
-    margin-left: 0;
-    border: 1px solid #999;
-    }
+  #canvas {
+    position: absolute;
+    top: 50px;
+    left: 150px;
+    /*text-align: center;*/
+  }
+  #worldwind {
+    width: 800px;
+    height: 600px;
+
+  }

@@ -9,10 +9,12 @@
     <script src="http://worldwindserver.net/webworldwind/worldwindlib.js" type="text/javascript"></script>
     <script src="https://google.github.io/palette.js/palette.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/categoricalLegendStyle.css">
+    <link rel="stylesheet" type="text/css" href="css/continousLegendStyle.css">
 </head>
 <body>
-<div style="position: absolute; top: 50px; left: 50px;">
-    <canvas id="worldwind" width="1024" height="768">
+<div id ="canvas">
+    <canvas id="worldwind">
         Your browser does not support HTML5 Canvas.
     </canvas>
 </div>
@@ -31,12 +33,12 @@
     </div>
 </div>
 
-<div id="timeUI"> 
+<div id="timeUI">
     <div id="time">Time</div>
     <select id="dateStamps">
     </select>
     <select id="timeStamps">
-    </select>  
+    </select>
 </div>
 
 <script src="src/utils/EventMixin.js"></script>
