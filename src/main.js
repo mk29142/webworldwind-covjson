@@ -18,20 +18,28 @@
   var layer
   var timeSelector
 
-
-
   CovJSON.read('testdata/multiTime.covjson').then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
 
       var values = dom.axes.get("t").values
 
-      layer = createLayer(cov)
-        .on('load', function () {
-          wwd.addLayer(layer)
-        }).load()
 
-      timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"}).on("change", function (time) {
+      timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"})
+
+      var dateStamps = document.getElementById("dateStamps")
+      var timeStamps = document.getElementById("timeStamps")
+
+      var date = dateStamps.options[dateStamps.selectedIndex].value
+
+      var time = timeStamps.options[timeStamps.selectedIndex].value
+
+      layer = createLayer(cov, date + "T" + time)
+      .on('load', function () {
+        wwd.addLayer(layer)
+      }).load()
+
+      timeSelector.on("change", function (time) {
         wwd.removeLayer(layer)
         layer = createLayer(cov, time.value)
           .on('load', function () {

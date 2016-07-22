@@ -36,7 +36,7 @@ function TimeSelector(values, options) {
 	var time //= timeStamps.options[timeStamps.selectedIndex].value
 
 
-	// this.fire("change", {value: date + "T" + time})
+	this.fire("change", {value: date + "T" + time})
 
 	dateStamps.addEventListener("change" , function() {
 
