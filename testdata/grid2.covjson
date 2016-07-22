@@ -5,8 +5,7 @@
     "domainType" : "Grid",
     "axes": {
       "x" : { "values": [-10,-5,0] },
-      "y" : { "values": [40,50] },
-      "t" : { "values": ["2010-01-01T00:12:20Z"] }
+      "y" : { "values": [40,50] }
     },
     "referencing": [{
       "components": ["x","y"],
@@ -63,8 +62,8 @@
     "LC" : {
       "type" : "NdArray",
       "dataType": "integer",
-      "axisNames": ["t","y","x"],
-      "shape": [1, 2, 3],
+      "axisNames": ["y","x"],
+      "shape": [2, 3],
       "values" : [ 1, 1, null, 2, 1, 2 ]
     }
   }
