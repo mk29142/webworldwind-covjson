@@ -1,0 +1,40 @@
+#my-legend #legend-scale-continous ul {
+  margin: 0;
+  padding: 0;
+  top: 0;
+  list-style: none;
+  text-align: right;
+  }
+
+#legend-scale-continous {
+  position: relative;
+  height: 250px;
+  width: 15px;
+  float: left;
+  text-align: bottom;
+
+  }
+#start {
+  position: absolute;
+  display: block;
+  float: left;
+  height: 10px;
+  width: 50px;
+  margin-bottom: 6px;
+  font-size: 80%;
+  bottom: 0;
+  }
+
+#finish {
+  position: absolute;
+  display: block;
+  float: left;
+  height: 50px;
+  width: 50px;
+  margin-bottom: 6px;
+  text-align: left;
+  font-size: 80%;
+  bottom: 0;
+  list-style: none;
+  top: 0;
+  }
