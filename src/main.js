@@ -17,44 +17,13 @@
   var legend
   var layer
   var timeSelector
+  var uiManager
 
   CovJSON.read('testdata/grid2.covjson').then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
 
-      var timeAxis = dom.axes.get("t")
-
-      if(!timeAxis) {
-        layer = createLayer(cov)
-          .on('load', function () {
-            wwd.addLayer(layer)
-          }).load()
-      }else {
-
-        var values = timeAxis.values
-
-        timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"})
-
-        var dateStamps = document.getElementById("dateStamps")
-        var timeStamps = document.getElementById("timeStamps")
-
-        var date = dateStamps.options[dateStamps.selectedIndex].value
-        var time = timeStamps.options[timeStamps.selectedIndex].value
-
-        layer = createLayer(cov, date + "T" + time)
-        .on('load', function () {
-          wwd.addLayer(layer)
-        }).load()
-
-        timeSelector.on("change", function (time) {
-          wwd.removeLayer(layer)
-          layer = createLayer(cov, time.value)
-          .on('load', function () {
-            wwd.addLayer(layer)
-          }).load()
-        })
-      }
-
+      uiManager = new UIManager(wwd,cov,dom)
 
     })
   })
@@ -72,77 +41,3 @@
   }
 
 }())
-/*
-
-
-function onLayerLoad (cov, layer, categories) {
-
-  if (!categories) {
-    createContinousLegend(cov, layer)
-  } else {
-    createCategoricalLegend(cov, layer, categories)
-  }
-  cov.loadDomain().then(function(dom) {
-    var values = dom.axes.get("t")
-    if(values) {
-      addDropDown(cov, layer)
-    }
-  })
-}
-
-function getWWD() {
-  return wwd
-}
-
-
-// Add a CovJSON layer
-CovJSON.read('multiTime.covjson').then(function (cov) {
-  var firstParamKey = cov.parameters.keys().next().value
-
-  var covjsonLayer = CovJSONLayer(cov, {
-    paramKey: firstParamKey,
-    onload: onLayerLoad,
-    time: undefined
-  })
-  wwd.addLayer(covjsonLayer)
-
-  window.wwd = wwd
-
-  window.layer = covjsonLayer
-
-  // wwd.goTo(new WorldWind.Position(50, 10, 4000000))
-})
-*/
-
-// add a computed coverage layer
-// function linspace (start, end, n) {
-//   var d = (end - start) / (n - 1 )
-//   return {
-//     length: n,
-//     get: function (i) {
-//       return start + i * d
-//     }
-//   }
-// }
-
-// var nx = 3000
-// var ny = 3000
-// var griddata = xndarray({
-//   length: nx*ny,
-//   get: function (i) {
-//     return i
-//   }
-// }, {
-//   shape: [ny,nx],
-//   names: ['y','x'],
-//   coords: {
-//     y: linspace(-70, 70, ny),
-//     x: linspace(-100, 0, nx)
-//   }
-// })
-
-// var covjsonLayer = new CovJSONGridLayer(CovUtils.fromXndarray(griddata), {
-//   displayName: 'Generated Grid',
-//   paletteExtent: [0,nx*ny]
-// })
-// wwd.addLayer(covjsonLayer)
