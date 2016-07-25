@@ -14,3 +14,5 @@ Completed:
 - Tablet friendly
 
 - prettify legend with boarder plus other css modifications.
+
+- Created a managing class for sorting though multiple UIs.
