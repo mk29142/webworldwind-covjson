@@ -7,8 +7,12 @@ function UIManager(wwd, cov, dom) {
 
   var timeAxis = dom.axes.get("t")
   var zaxis = dom.axes.get("z")
-  this.runTimeSelector(timeAxis)
-  this.runDepthSelector(zaxis)
+  if(timeAxis) {
+    this.runTimeSelector(timeAxis)
+  }
+  if(zaxis) {
+    this.runDepthSelector(zaxis)
+  }
 }
 
 UIManager.prototype.runTimeSelector = function (timeAxis) {
