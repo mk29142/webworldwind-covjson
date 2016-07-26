@@ -6,15 +6,16 @@ function UIManager(wwd, cov, dom) {
   var layer
 
   var timeAxis = dom.axes.get("t")
+  var zaxis = dom.axes.get("z")
   this.runTimeSelector(timeAxis)
-
+  this.runDepthSelector(zaxis)
 }
 
 UIManager.prototype.runTimeSelector = function (timeAxis) {
   var self = this
 
   if(!timeAxis) {
-    layer = this.createLayer(this._cov)
+    layer = this.createLayer()
       .on('load', function () {
         self._wwd.addLayer(layer)
       }).load()
@@ -30,14 +31,14 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
     var date = dateStamps.options[dateStamps.selectedIndex].value
     var time = timeStamps.options[timeStamps.selectedIndex].value
 
-    layer = this.createLayer(date + "T" + time)
+    layer = this.createLayer({time: date + "T" + time})
     .on('load', function () {
       self._wwd.addLayer(layer)
     }).load()
 
     timeSelector.on("change", function (time) {
       self._wwd.removeLayer(layer)
-      layer = self.createLayer(time.value)
+      layer = self.createLayer({time: time.value})
       .on('load', function () {
         self._wwd.addLayer(layer)
       }).load()
@@ -45,13 +46,47 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
   }
 }
 
-UIManager.prototype.createLayer = function(time) {
+UIManager.prototype.runDepthSelector = function(zaxis) {
+  var self = this
+
+  if(!zaxis) {
+    layer = this.createLayer()
+      .on('load', function () {
+        self._wwd.addLayer(layer)
+      }).load()
+  }else {
+
+    var values = zaxis.values
+
+    depthSelector = new DepthSelector(values, {zaxisID: "zaxis"})
+
+    var depthStamps = document.getElementById("zaxis")
+
+    var currDepth = depthStamps.options[depthStamps.selectedIndex].value
+
+    layer = this.createLayer({depth: currDepth})
+    .on('load', function () {
+      self._wwd.addLayer(layer)
+    }).load()
+
+    depthSelector.on("change", function (depth) {
+      self._wwd.removeLayer(layer)
+      layer = self.createLayer({depth: depth.value})
+      .on('load', function () {
+        self._wwd.addLayer(layer)
+      }).load()
+    })
+  }
+}
+
+UIManager.prototype.createLayer = function(options) {
   var cov = this._cov
   var firstParamKey = cov.parameters.keys().next().value
 
   var layer = CovJSONLayer(cov, {
     paramKey: firstParamKey,
-    time: time
+    time: options.time,
+    depth: options.depth
   }).on('load', function () {
     this._legend = createLegend(cov, layer, firstParamKey)
   })

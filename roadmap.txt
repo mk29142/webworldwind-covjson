@@ -1,7 +1,8 @@
 
 TODO:
 
-1) create UI for different verticle axis.
+1) need to link both UIs. So it creates one layer when with constraints for
+    time and depth rather then it subsetting time and then depth.
 
 Completed:
 
@@ -16,3 +17,5 @@ Completed:
 - prettify legend with boarder plus other css modifications.
 
 - Created a managing class for sorting though multiple UIs.
+
+- create UI for different verticle axis.

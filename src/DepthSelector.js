@@ -7,8 +7,9 @@ function DepthSelector(values, options) {
 
 	this._fillDepthOptions(values)
 
+	// console.log(depthStamps.options[depthStamps.selectedIndex].value);
 	depthStamps.addEventListener("change" , function() {
-    console.log("action");
+    // console.log(this.value);
 		self.fire("change", {value: this.value})
     })
 }

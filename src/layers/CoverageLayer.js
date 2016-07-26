@@ -107,6 +107,11 @@ CovJSONGridLayer.prototype.load = function () {
   if(this.options.time) {
     constraints.t = this.options.time
   }
+  //casting string to int since depth should be number not string
+  //need to change later (implement map)
+  if(this.options.depth) {
+    constraints.z = +this.options.depth
+  }
 
   this.cov.subsetByValue(constraints).then(function(subsetCov) {
     Promise.all([subsetCov.loadDomain(), subsetCov.loadRange(self.paramKey)]).then(function (res) {
