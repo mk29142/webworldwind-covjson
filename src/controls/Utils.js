@@ -1,5 +1,5 @@
 /**
- * @param {Array} colourValues 
+ * @param {Array} colourValues
  *  Takes an array of 3 numbers provided by the palette
  *  and converts them into an RGB string that is compatiable
  *  with a css gradient.
@@ -9,9 +9,9 @@ function createRGBString (colourValues) {
 }
 
 /**
- * @param {Coverage} cov 
+ * @param {Coverage} cov
  * @param {String} paramKey
- * Dynamically changes the title of the legend to that 
+ * Dynamically changes the title of the legend to that
  * specified by the coverageJSON file and if it continous it
  * adds in the units of the data i.e Degrees Celcius for Temperature
  */
@@ -24,8 +24,8 @@ function changeTitleAndUnits (cov, paramKey) {
 	changeHTMLText("legend-title", title)
 
 	if(!categories){
-		if(param.unit !== undefined) {
-		var units = param.unit.label.en
+		if(param.unit) {
+			var units = param.unit.label.en
 		changeHTMLText("legend-units", "(" + units + ")")
 	    }
 	}

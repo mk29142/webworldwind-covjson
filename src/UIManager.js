@@ -2,6 +2,7 @@ function UIManager(wwd, cov, dom) {
   this._wwd = wwd
   this._cov = cov
   this._dom = dom
+  this._fullTime = ""
 
   var layer
 
@@ -9,9 +10,15 @@ function UIManager(wwd, cov, dom) {
   var zaxis = dom.axes.get("z")
   if(timeAxis) {
     this.runTimeSelector(timeAxis)
+  }else {
+    var timeUI = document.getElementById("timeUI")
+  	timeUI.parentNode.removeChild(timeUI)
   }
   if(zaxis) {
     this.runDepthSelector(zaxis)
+  }else {
+    var depthUI = document.getElementById("depthUI")
+  	depthUI.parentNode.removeChild(depthUI)
   }
 }
 
@@ -39,6 +46,7 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
     .on('load', function () {
       self._wwd.addLayer(layer)
     }).load()
+    this._fullTime = date + "T" + time
 
     timeSelector.on("change", function (time) {
       self._wwd.removeLayer(layer)
@@ -46,6 +54,7 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
       .on('load', function () {
         self._wwd.addLayer(layer)
       }).load()
+      this._fullTime = time
     })
   }
 }
@@ -72,6 +81,7 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
     .on('load', function () {
       self._wwd.addLayer(layer)
     }).load()
+    this._depth = currDepth
 
     depthSelector.on("change", function (depth) {
       self._wwd.removeLayer(layer)
@@ -79,6 +89,7 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
       .on('load', function () {
         self._wwd.addLayer(layer)
       }).load()
+      this._depth = depth
     })
   }
 }
