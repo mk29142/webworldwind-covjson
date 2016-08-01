@@ -14,30 +14,25 @@
 
   window.wwd = wwd
 
-  var legend
-  var layer
-  var timeSelector
   var uiManager
 
-  CovJSON.read('testdata/grid2.covjson').then(function (cov) {
+  CovJSON.read("testdata/grid.covjson").then(function (cov) {
+
+    // var firstParamKey = cov.parameters.keys().next().value
 
     cov.loadDomain().then(function(dom) {
-
       uiManager = new UIManager(wwd,cov,dom)
+      var cR = new WorldWind.ClickRecognizer(wwd, function() {
+        console.log("here");
+
+      })
+
+
+    //
+    //   var layer = CovJSONLayer(cov, {
+    //     paramKey: firstParamKey,
+    //   })
 
     })
   })
-
-  function createLayer (cov, time) {
-    var firstParamKey = cov.parameters.keys().next().value
-
-    var layer = CovJSONLayer(cov, {
-      paramKey: firstParamKey,
-      time: time
-    }).on('load', function () {
-      legend = createLegend(cov, layer, firstParamKey)
-    })
-    return layer
-  }
-
 }())
