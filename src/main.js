@@ -1,4 +1,11 @@
-(function () {
+
+
+
+
+
+
+
+  (function () {
 
   // Create a World Window for the canvas.
   var wwd = new WorldWind.WorldWindow("worldwind")
@@ -14,9 +21,21 @@
 
   window.wwd = wwd
 
-  var uiManager
 
-  CovJSON.read("testdata/grid.covjson").then(function (cov) {
+  function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  var uiManager
+  var file_name = getParameterByName('file_name');
+  console.log(file_name)
+  CovJSON.read("testdata/" + file_name).then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
       uiManager = new UIManager(wwd,cov,dom)
@@ -62,3 +81,4 @@
     })
   })
 }())
+
