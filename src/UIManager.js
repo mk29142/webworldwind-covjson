@@ -3,19 +3,24 @@ function UIManager(wwd, cov, dom) {
   this._cov = cov
   this._dom = dom
   this._fullTime = ""
-
-  var layer
+  var self = this
 
   var timeAxis = dom.axes.get("t")
   var zaxis = dom.axes.get("z")
+  layer = this.createLayer({time: "", depth: ""})
+    .on('load', function () {
+      self._wwd.addLayer(layer)
+    }).load()
+  this._layer = layer
+
   if(timeAxis) {
-    layer = this.runTimeSelector(timeAxis)
+    this._layer = this.runTimeSelector(timeAxis)
   }else {
     var timeUI = document.getElementById("timeUI")
     timeUI.parentNode.removeChild(timeUI)
   }
   if(zaxis) {
-    layer = this.runDepthSelector(zaxis)
+    this._layer = this.runDepthSelector(zaxis)
     // console.log(this._depth);
   }else {
     var depthUI = document.getElementById("depthUI")
@@ -111,4 +116,8 @@ UIManager.prototype.createLayer = function(options) {
     this._legend = createLegend(cov, layer, firstParamKey)
   })
   return layer
+}
+
+UIManager.prototype.getLayer = function() {
+  return this._layer
 }

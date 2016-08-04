@@ -18,13 +18,39 @@
 
   CovJSON.read("testdata/grid.covjson").then(function (cov) {
 
-    // var firstParamKey = cov.parameters.keys().next().value
-
     cov.loadDomain().then(function(dom) {
       uiManager = new UIManager(wwd,cov,dom)
-      var cR = new WorldWind.ClickRecognizer(wwd, function() {
-        console.log("here");
+      // var layer = uiManager.getLayer()
+      // console.log(layer);
 
+      // var proj = CovUtils.getProjection(dom)
+      // console.log(proj);
+
+      var cR = new WorldWind.ClickRecognizer(wwd, function() {
+        var xClick = cR.clientX
+        var yClick = cR.clientY
+
+        console.log(xClick + "  " + yClick);
+
+        var lats = dom.axes.get('y').values
+        var lons = dom.axes.get('x').values
+
+        var bbox = getGridBbox(dom.axes)
+        console.log(bbox);
+
+        //world wind has bug, doesn't give right lon and lat when zoomed out
+        var vec = new WorldWind.Vec2(xClick, yClick)
+        var lat = wwd.pick(vec).terrainObject().position.latitude
+        var long = wwd.pick(vec).terrainObject().position.longitude
+
+        var iLat = CovUtils.indexOfNearest(lats, lat)
+        var iLon = CovUtils.indexOfNearest(lons, long)
+
+        console.log(lat + "  " + long);
+          var firstParamKey = cov.parameters.keys().next().value
+          cov.loadRange(firstParamKey).then(function(range) {
+            console.log(range.get({y: iLat, x: iLon}))
+          })
       })
 
 

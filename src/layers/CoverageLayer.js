@@ -88,7 +88,6 @@ function loadNewPalette (categories) {
  */
 var CovJSONGridLayer = function (cov, options) {
   this.options = options
-  options.onload = options.onload || function () {}
   var self = this
   this.cov = cov
   this.paramKey = options.paramKey
@@ -241,8 +240,50 @@ function scale (val, palette, extent) {
   return scaled
 }
 
-var CovJSONVectorLayer = function (cov, options) {
+var CovJSONVectorLayer = function (cov, options, type) {
+  this.options = options
+  this.cov = cov
+  this.paramKey = options.paramKey
+  this.type = type
+  this.load()
   // TODO maybe convert coverage to GeoJSON and use GeoJSONParser, return RenderableLayer
+}
+
+// may not need to do this
+// CovJSONVectorLayer.prototype = Object.create(TiledCanvasLayer.prototype);
+
+mixin(EventMixin, CovJSONVectorLayer)
+
+CovJSONVectorLayer.prototype.load = function() {
+  switch (this.type) {
+    case "Trajectory":
+  //  var layer = new WorldWind.RenderableLayer("Trajectory")
+    //loadTrajectory
+    break
+    case "Point":
+      // var layer = new WorldWind.RenderableLayer("Point")
+      // var self = this
+      // Promise.all([this.cov.loadDomain(), this.cov.loadRange(self.paramKey)]).then(function (res) {
+      //   var domain = res[0]
+      //   var range = res[1]
+      //
+      //   var xCoord = domain.axes.get("x").values
+      //   var yCoord = domain.axes.get("y").values
+      //   var coordinates = [xCoord[0], yCoord[0]]
+      //   var bbox = getGridBbox(domain.axes)
+      //
+      //   var geoPoint = new WorldWind.GeoJSONGeometry(coordinates, self.type, bbox)
+      //
+      //   var geoParser = new WorldWind.GeoJSONParser("testdata/point.covjson")
+      //   // console.log(geoParser);
+      //   var addRendPoint = geoParser.addRenderablesForPoint(layer, geoPoint)
+      //   geoParser.load(addRendPoint, layer)
+      //   self.fire('load')
+      //   return layer
+      //})
+    // //loadPoint
+    break
+  }
 }
 
 var COVJSON_NS = 'http://covjson.org/def/domainTypes#'
@@ -256,7 +297,10 @@ var CovJSONLayer = function (cov, options) {
   if (cov.domainType === COVJSON_NS + 'Grid') {
     return new CovJSONGridLayer(cov, options)
   } else if (CovJSONVectorDomainTypes.indexOf(cov.domainType) !== -1) {
-    return CovJSONVectorLayer(cov, options)
+    var index = CovJSONVectorDomainTypes.indexOf(cov.domainType)
+    var endIndex = CovJSONVectorDomainTypes[index].indexOf("#")
+    var type = CovJSONVectorDomainTypes[index].substr(endIndex+1)
+    return new CovJSONVectorLayer(cov, options, type)
   } else {
     throw new Error('Unsupported CovJSON domain type: ' + cov.domainType)
   }
