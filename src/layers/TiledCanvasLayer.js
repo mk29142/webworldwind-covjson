@@ -24,9 +24,9 @@ TiledCanvasLayer.prototype.retrieveTileImage = function (dc, tile, suppressRedra
       var canvas = document.createElement('canvas');
       canvas.width = tile.tileWidth;
       canvas.height = tile.tileHeight;
-      
+
       this.drawCanvasTile(canvas, tile);
-      
+
       var texture = layer.createTexture(dc, tile, canvas);
       layer.removeFromCurrentRetrievals(imagePath);
 

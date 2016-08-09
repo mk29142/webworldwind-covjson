@@ -28,11 +28,12 @@
   //
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
-  CovJSON.read("testdata/grid.covjson").then(function (cov) {
+  CovJSON.read("testdata/point.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
       var uiManager = new UIManager(wwd,cov,dom)
       var popup = new Popup(wwd, cov, dom).display()
+        wwd.goTo(new WorldWind.Position(-40.2, -5.1, 4000000))
 
     })
   })
