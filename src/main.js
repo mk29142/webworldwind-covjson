@@ -28,10 +28,11 @@
   //
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
-  CovJSON.read("testdata/grid.covjson").then(function (cov) {
+  CovJSON.read("testdata/grid2.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
       var uiManager = new UIManager(wwd,cov,dom)
+      var ps = new ParamSelector(cov)
       var popup = new Popup(wwd, cov, dom).display()
 
     })
