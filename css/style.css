@@ -25,32 +25,31 @@
     border-radius: 1em;
     background-color: rgba(255,255,255,0.7);
     }
+   #paramUI {
+    position: absolute;
+    color: #777;
+    top: 10px;
+    right: 10px;
+    padding-top: 0;
+    padding-right: 1cm;
+    padding-left: 1cm;
+    padding-bottom: 0;
+    border:1px solid black;
+    border-radius: 1em;
+    background-color: rgba(255,255,255,0.7);
+    }
 
-    #paramUI {
-  position: absolute;
-  color: #777;
-  top: 10px;
-  right: 10px;
-  padding-top: 0;
-  padding-right: 1cm;
-  padding-left: 1cm;
-  padding-bottom: 0;
-  border:1px solid black;
-  border-radius: 1em;
-  background-color: rgba(255,255,255,0.7);
-  }
-
-  #paramUI li {
-    display: table-row;
-  }
-  #paramUI li div {
-    display: table-cell;
-    border: 1px#000 solid;
-    vertical-align: middle;
-  }
-  #paramUI ul {
-    padding-left: 0;
-  }
+    #paramUI li {
+      display: table-row;
+    }
+    #paramUI li div {
+      display: table-cell;
+      border: 1px#000 solid;
+      vertical-align: middle;
+    }
+    #paramUI ul {
+      padding-left: 0;
+    }
 
   #canvas {
     position: absolute;

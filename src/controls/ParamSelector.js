@@ -1,5 +1,6 @@
 function ParamSelector(cov) {
   this._cov = cov
+  // console.log(cov);
   var paramUI = document.getElementById("paramUI")
   var inputs = document.getElementsByTagName("input")
   var arr = Array.from(inputs)
@@ -15,7 +16,7 @@ function ParamSelector(cov) {
         otherBoxes.forEach(function(obj) {
           document.getElementById(obj).checked = false
         })
-        // self.fire("change", this.value)
+        self.fire("change", this.value)
       });
     }
 }
@@ -47,3 +48,5 @@ ParamSelector.prototype.initParams = function() {
    document.getElementById(params[0]).checked = true;
    this._paramKey = params[0]
  }
+
+mixin(EventMixin, ParamSelector)
