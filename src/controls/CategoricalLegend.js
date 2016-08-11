@@ -29,10 +29,14 @@ function CategoricalLegend (cov, layer, categories) {
 	var paramKey = cov.parameters.keys().next().value
 
 	var legendBar = document.getElementById("legend-bar")
-	legendBar.parentNode.removeChild(legendBar)
+	if(legendBar) {
+		legendBar.parentNode.removeChild(legendBar)
+	}
 
 	var lsc = document.getElementById('legend-scale-continous')
-	lsc.parentNode.removeChild(lsc)
+	if(lsc) {
+		lsc.parentNode.removeChild(lsc)
+	}
 
 	changeTitleAndUnits(cov, paramKey)
 

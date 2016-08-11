@@ -1,24 +1,24 @@
 function ParamSelector(cov) {
   this._cov = cov
-  // console.log(cov);
   var paramUI = document.getElementById("paramUI")
-  var inputs = document.getElementsByTagName("input")
-  var arr = Array.from(inputs)
   var self = this
 
   this.initParams()
-  // document.addEventListener('DOMContentLoaded', function () {
-    var all = document.querySelectorAll("input")
-    for(var i = 0; i < all.length; i++) {
-      all[i].addEventListener('click', function() {
-        var otherBoxes = arr.filter(obj => obj.id != this.id).map(obj => obj.id)
-        // console.log(otherBoxes);
-        otherBoxes.forEach(function(obj) {
-          document.getElementById(obj).checked = false
-        })
+  var all = document.querySelectorAll("input")
+  var arr = Array.from(all)
+  for(var i = 0; i < all.length; i++) {
+    all[i].addEventListener('click', function() {
+      var otherBoxes = arr.filter(obj => obj.id != this.id).map(obj => obj.id)
+      otherBoxes.forEach(function(obj) {
+        document.getElementById(obj).checked = false
+      })
+      if(document.getElementById(this.value).checked) {
         self.fire("change", this.value)
-      });
-    }
+      } else {
+        self.fire("change", "off")
+      }
+    });
+  }
 }
 
 ParamSelector.prototype.initParams = function() {
@@ -35,7 +35,6 @@ ParamSelector.prototype.initParams = function() {
      elem.id = params[i]
      elem.value = params[i]
      elem.checked = false;
-     // elem.class = "paramCheckBox"
 
      var label = document.createElement("label")
      label.appendChild(document.createTextNode(params[i]))

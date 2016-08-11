@@ -114,6 +114,7 @@ CovJSONGridLayer.prototype.load = function () {
 
   this.cov.subsetByValue(constraints).then(function(subsetCov) {
     Promise.all([subsetCov.loadDomain(), subsetCov.loadRange(self.paramKey)]).then(function (res) {
+      // console.log("here  " + constraints.t);
       self.domain = res[0]
       self.range = res[1]
 

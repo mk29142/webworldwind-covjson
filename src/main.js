@@ -29,14 +29,29 @@
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
 
-  CovJSON.read("testdata/grid2.covjson").then(function (cov) {
+  CovJSON.read("testdata/grid.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
-      var uiManager = new UIManager(wwd,cov,dom)
       var ps = new ParamSelector(cov)
-      var popup = new Popup(wwd, cov, dom).display()
-        wwd.goTo(new WorldWind.Position(-40.2, -5.1, 4000000))
 
+      var uiManager = new UIManager(wwd,cov,dom, cov.parameters.keys().next().value)
+      var layer = uiManager.getLayer()
+      
+      var popup = new Popup(wwd, cov, dom).display()
+
+      ps.on("change", function(val) {
+        if(val == "off") {
+          wwd.removeLayer(layer)
+          clearLegend()
+          clearSelectors()
+        }else {
+          var legend = document.getElementById("my-legend")
+          legend.style.visibility = "visible"
+          uiManager = new UIManager(wwd,cov,dom, val)
+          layer = uiManager.getLayer()
+        }
+      })
+        // wwd.goTo(new WorldWind.Position(-40.2, -5.1, 4000000))
     })
   })
 }())

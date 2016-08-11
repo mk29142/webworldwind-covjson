@@ -29,7 +29,40 @@ function changeTitleAndUnits (cov, paramKey) {
 		changeHTMLText("legend-units", "(" + units + ")")
 	    }
 	}
+}
 
+function clearLegend() {
+		changeHTMLText("legend-title", "")
+		changeHTMLText("legend-units", "")
+
+		var ul = document.getElementById("labels");
+		if (ul) {
+			while (ul.firstChild) {
+				ul.removeChild(ul.firstChild);
+			}
+		}
+
+		var legendBar = document.getElementById("legend-bar")
+		if(legendBar) {
+      legendBar.style.visibility = "hidden"
+		}
+
+		var lsc = document.getElementById('legend-scale-continous')
+		if(lsc) {
+      lsc.style.visibility = "hidden"
+		}
+
+		var legend = document.getElementById("my-legend")
+		legend.style.visibility = "hidden"
+}
+
+function clearSelectors() {
+	var dateStamps = document.getElementById("dateStamps")
+	dateStamps.options.length = 0
+	var timeStamps = document.getElementById("timeStamps")
+	timeStamps.options.length = 0
+	var zaxis = document.getElementById("zaxis")
+	zaxis.options.length = 0
 }
 
 function createLegend (cov, layer, paramKey) {

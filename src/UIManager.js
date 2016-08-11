@@ -1,70 +1,57 @@
-function UIManager(wwd, cov, dom) {
+function UIManager(wwd, cov, dom, param) {
   this._wwd = wwd
   this._cov = cov
   this._dom = dom
   this._fullTime = ""
+  this._param = param
   var self = this
 
   var timeAxis = dom.axes.get("t")
   var zaxis = dom.axes.get("z")
+
   layer = this.createLayer({time: "", depth: ""})
-    .on('load', function () {
-      self._wwd.addLayer(layer)
-    }).load()
+  .on('load', function () {
+    self._wwd.addLayer(layer)
+  }).load()
   this._layer = layer
 
   if(timeAxis) {
     this._layer = this.runTimeSelector(timeAxis)
-  }else {
-    var timeUI = document.getElementById("timeUI")
-    timeUI.parentNode.removeChild(timeUI)
   }
   if(zaxis) {
     this._layer = this.runDepthSelector(zaxis)
     // console.log(this._depth);
-  }else {
-    var depthUI = document.getElementById("depthUI")
-    depthUI.parentNode.removeChild(depthUI)
   }
 }
 
 UIManager.prototype.runTimeSelector = function (timeAxis) {
   var self = this
 
-  if(!timeAxis) {
-    layer = this.createLayer()
-      .on('load', function () {
-        self._wwd.addLayer(layer)
-      }).load()
-      return layer
-  }else {
+  var values = timeAxis.values
 
-    var values = timeAxis.values
+  timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"})
 
-    timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"})
+  var dateStamps = document.getElementById("dateStamps")
+  var timeStamps = document.getElementById("timeStamps")
 
-    var dateStamps = document.getElementById("dateStamps")
-    var timeStamps = document.getElementById("timeStamps")
+  var date = dateStamps.options[dateStamps.selectedIndex].value
+  var time = timeStamps.options[timeStamps.selectedIndex].value
 
-    var date = dateStamps.options[dateStamps.selectedIndex].value
-    var time = timeStamps.options[timeStamps.selectedIndex].value
+  layer = this.createLayer({time: date + "T" + time})
+  .on('load', function () {
+    self._wwd.addLayer(layer)
+  }).load()
+  this._fullTime = date + "T" + time
 
-    layer = this.createLayer({time: date + "T" + time})
+  timeSelector.on("change", function (time) {
+    self._wwd.removeLayer(layer)
+    layer = self.createLayer({time: time.value})
     .on('load', function () {
       self._wwd.addLayer(layer)
     }).load()
-    this._fullTime = date + "T" + time
-
-    timeSelector.on("change", function (time) {
-      self._wwd.removeLayer(layer)
-      layer = self.createLayer({time: time.value})
-      .on('load', function () {
-        self._wwd.addLayer(layer)
-      }).load()
-      this._fullTime = time
-    })
-    return layer
-  }
+    this._fullTime = time
+  })
+  return layer
 }
 
 UIManager.prototype.runDepthSelector = function(zaxis) {
@@ -106,14 +93,14 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
 
 UIManager.prototype.createLayer = function(options) {
   var cov = this._cov
-  var firstParamKey = cov.parameters.keys().next().value
+  var self = this
 
   var layer = CovJSONLayer(cov, {
-    paramKey: firstParamKey,
+    paramKey: this._param,
     time: options.time,
     depth: options.depth
   }).on('load', function () {
-    this._legend = createLegend(cov, layer, firstParamKey)
+    this._legend = createLegend(cov, layer, self._param)
   })
   return layer
 }

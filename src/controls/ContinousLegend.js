@@ -10,29 +10,30 @@
  */
 function changeHTMLText (id, text) {
 
+	// console.log(id);
 	var span = document.getElementById(id);
 	var	txt = document.createTextNode(text);
-	span.innerText = txt.textContent;	
+	span.innerText = txt.textContent;
 }
 
 /**
  * @param {Coverage} cov
  * @param {Array} minMax
- * Takes in the maximum and minimum values from the   
+ * Takes in the maximum and minimum values from the
  * continous data set and adds them to the legend.
  */
 function changeLegendScale(cov, minMax) {
 
 	changeHTMLText("start", minMax[0])
 	changeHTMLText("finish", minMax[1])
-	
+
 }
 
 /**
  * @param {Coverage} cov
  * @param {CoverageJSONLayer} layer
  * Creates a continous legend with a colour gradient for continous data types
- * like temperature by extracting the colours from the layer and the key information 
+ * like temperature by extracting the colours from the layer and the key information
  * of the cateogry from the Coverage object.
  */
 function ContinousLegend (cov, layer) {
@@ -40,7 +41,7 @@ function ContinousLegend (cov, layer) {
 	var paramKey = cov.parameters.keys().next().value
 	var palette = layer.palette
 	var legend = document.getElementById("my-legend")
-	var minMax = CovUtils.minMaxOfRange(layer.range) 
+	var minMax = CovUtils.minMaxOfRange(layer.range)
 
 	changeTitleAndUnits(cov,paramKey)
 
@@ -49,6 +50,9 @@ function ContinousLegend (cov, layer) {
 	legend.display = "inline"
 
 	var legendBar = document.getElementById("legend-bar")
+	legendBar.style.visibility = "visible"
+	var lsc = document.getElementById('legend-scale-continous')
+	lsc.style.visibility = "visible"
 
 	var colourString = ""
 
