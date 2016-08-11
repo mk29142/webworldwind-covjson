@@ -4,15 +4,16 @@
     "type" : "Domain",
     "domainType" : "Grid",
     "axes": {
-      "x" : { "start": 7, "stop": 14, "num": 4 },
-      "y" : { "start": 54, "stop": 48, "num": 4 },
-      "t" : { "values": ["2010-01-01T00:12:20Z", "2010-01-01T00:12:25Z", "2010-01-02T00:12:25Z"] }
+      "x" : { "values": [-10,-5,0] },
+      "y" : { "values": [40,50] },
+      "z" : { "values": [ 5] },
+      "t" : { "values": ["2010-01-01T00:12:20Z"] }
     },
     "referencing": [{
-      "components": ["x","y"],
+      "components": ["y","x","z"],
       "system": {
         "type": "GeodeticCRS",
-        "id": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+        "id": "http://www.opengis.net/def/crs/EPSG/0/4979"
       }
     }, {
       "components": ["t"],
@@ -23,54 +24,35 @@
     }]
   },
   "parameters" : {
-    "temperature": {
+    "ICEC": {
       "type" : "Parameter",
       "description": {
-        "en": "Air temperature measured in degrees Celsius."
+      	"en": "Sea Ice concentration (ice=1;no ice=0)"
       },
       "unit" : {
         "label": {
-          "en": "Degree Celsius"
+          "en": "Ratio"
         },
         "symbol": {
-          "value": "Cel",
+          "value": "1",
           "type": "http://www.opengis.net/def/uom/UCUM/"
         }
       },
       "observedProperty" : {
-        "id": "http://vocab.nerc.ac.uk/standard_name/air_temperature/",
+        "id" : "http://vocab.nerc.ac.uk/standard_name/sea_ice_area_fraction/",
         "label" : {
-          "en": "Air temperature",
-          "de": "Lufttemperatur"
-        },
-        "description": {
-          "en": "Air temperature is the bulk temperature of the air, not the surface (skin) temperature."
+          "en": "Sea Ice Concentration"
         }
       }
     }
   },
   "ranges" : {
-    "temperature" : {
+    "ICEC" : {
       "type" : "NdArray",
       "dataType": "float",
-      "axisNames": ["y", "x", "t"],
-      "shape": [4, 4, 3],
-      "values" : [
-        17.3, 18.2, 16.5, 18.7,
-        18.1, 19.4, 200.0, 18.6,
-        205.1, 20.4, 21.1, 20.7,
-        21.1, 21.3, 20.5, 19.2,
-
-        18.7, 18.2, 16.5, 18.7,
-        18.1, 20.1, 17.2, 18.6,
-        19.2, 20.0, 99.0, 20.7,
-        21.1, 21.3, 100.1, 19.2,
-
-        17.3, 18.2, 16.5, 18.7,
-        18.1, 19.4, 200.0, 18.6,
-        205.1, 20.4, 21.1, 20.7,
-        21.1, 21.3, 20.5, 19.2
-      ]
+      "axisNames": ["t","z","y","x"],
+      "shape": [1, 1, 2, 3],
+      "values" : [ 0.5, 0.6, 0.4, 0.6, 0.2, null ]
     }
   }
 }
