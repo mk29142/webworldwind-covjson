@@ -9,6 +9,7 @@ function UIManager(wwd, cov, dom, param) {
   var timeAxis = dom.axes.get("t")
   var zaxis = dom.axes.get("z")
 
+  //creates the intial layer before any UI options are selected
   layer = this.createLayer({time: "", depth: ""})
   .on('load', function () {
     self._wwd.addLayer(layer)
@@ -23,7 +24,12 @@ function UIManager(wwd, cov, dom, param) {
     // console.log(this._depth);
   }
 }
-
+/**
+ * Runs the time UI, firstly creates the layer based
+ * on the initialised values in the boxes and then uses the event handler to
+ * change the layer based on specfic time frame
+ * @param {Object} timeAxis
+ */
 UIManager.prototype.runTimeSelector = function (timeAxis) {
   var self = this
 
@@ -54,6 +60,12 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
   return layer
 }
 
+/**
+ * Runs the depth UI, firstly creates the layer based
+ * on the initialised values in the boxes and then uses the event handler to
+ * change the layer based on specfic depth
+ * @param {Object} zaxis
+ */
 UIManager.prototype.runDepthSelector = function(zaxis) {
   var self = this
 
@@ -91,6 +103,11 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
   }
 }
 
+/**
+ * Creates a new layer with specific attributes
+ * and creates a legend for it
+ * @param {Object} options
+ */
 UIManager.prototype.createLayer = function(options) {
   var cov = this._cov
   var self = this
