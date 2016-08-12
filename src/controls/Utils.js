@@ -1,4 +1,8 @@
 /**
+ * @external {Coverage} https://github.com/Reading-eScience-Centre/coverage-jsapi/blob/master/Coverage.md
+ */
+
+/**
  * @param {Array} colourValues
  *  Takes an array of 3 numbers provided by the palette
  *  and converts them into an RGB string that is compatiable
@@ -30,7 +34,10 @@ function changeTitleAndUnits (cov, paramKey) {
 	    }
 	}
 }
-
+/**
+ * Clears everything in the legend for when a parameter is switched off.
+ * @param{}
+ */
 function clearLegend() {
 		changeHTMLText("legend-title", "")
 		changeHTMLText("legend-units", "")
@@ -65,6 +72,14 @@ function clearSelectors() {
 	zaxis.options.length = 0
 }
 
+/**
+ * Creates a legend for a given layer and parameter key.
+ * Legend can be either continous or categorical i.e for continous
+ * or discrete datasets.
+ * @param {Coverage} cov
+ * @param {class} layer
+ * @param {String} paramKey
+ */
 function createLegend (cov, layer, paramKey) {
 	var param = cov.parameters.get(paramKey)
 	var allCategories = param.observedProperty.categories

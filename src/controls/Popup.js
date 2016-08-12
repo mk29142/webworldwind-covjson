@@ -4,6 +4,11 @@ function Popup(wwd, cov, dom) {
   this._dom = dom
 }
 
+/**
+ * Creates a popup box when the WorldWind canvas is clicked on.
+ * uses the lat and long coordinates of the click to find the data value at that point
+ * and displays it in a box at that position.
+ */
 Popup.prototype.display = function() {
 
   var self = this

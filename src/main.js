@@ -29,14 +29,14 @@
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
 
-  CovJSON.read("testdata/grid.covjson").then(function (cov) {
+  CovJSON.read("testdata/point.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
       var ps = new ParamSelector(cov)
 
       var uiManager = new UIManager(wwd,cov,dom, cov.parameters.keys().next().value)
       var layer = uiManager.getLayer()
-      
+
       var popup = new Popup(wwd, cov, dom).display()
 
       ps.on("change", function(val) {

@@ -11,7 +11,10 @@ function DepthSelector(values, options) {
 		self.fire("change", {value: this.value})
     })
 }
-
+/**
+ * Populates the dropdown menu for the depth
+ * @param {Array} values
+ */
 DepthSelector.prototype._fillDepthOptions = function (values) {
 
 	var depthStamps = document.getElementById(this._depthId)

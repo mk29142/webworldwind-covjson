@@ -8,19 +8,25 @@ function ParamSelector(cov) {
   var arr = Array.from(all)
   for(var i = 0; i < all.length; i++) {
     all[i].addEventListener('click', function() {
+
+      //gets all other parameters and unclicks them so that only one box at
+      // a time is checked.
       var otherBoxes = arr.filter(obj => obj.id != this.id).map(obj => obj.id)
-      otherBoxes.forEach(function(obj) {
-        document.getElementById(obj).checked = false
-      })
+      otherBoxes.forEach(obj => document.getElementById(obj).checked = false)
+
       if(document.getElementById(this.value).checked) {
         self.fire("change", this.value)
       } else {
+        //if this box has been unchecked then it fires a special string to indicate this action
         self.fire("change", "off")
       }
-    });
+    })
   }
 }
 
+/**
+ * Creates a check box for each parameter in the coverageJSON file.
+ */
 ParamSelector.prototype.initParams = function() {
    var params = Array.from(this._cov.parameters.keys())
 

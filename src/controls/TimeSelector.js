@@ -1,4 +1,10 @@
-
+/**
+ * Creates a Time and date drop down for the time values given.
+ * And eventListener selects the values and fires the change to the EventMixin
+ * of this class.
+ * @param {Array} values
+ * @param {Object} options
+ */
 function TimeSelector(values, options) {
 	this._dateId = options.dateId
 	this._timeId = options.timeId
@@ -18,7 +24,6 @@ function TimeSelector(values, options) {
 		    date = values[i].substr(0,endIndex)
 		    time = values[i].substr(endIndex+1)
 		}
-		// console.log(this._dateToTimeMap)
 		if(date in this._dateToTimeMap) {
 			this._dateToTimeMap[date].push(time)
 		} else {
@@ -47,13 +52,13 @@ function TimeSelector(values, options) {
 			self.fire("change", {value: date + "T" + time})
 		})
 
-		// attach change listeners to select elements
-		// ...
-		// this.fire('change', {value: value})
-
     })
 }
 
+/**
+ * Given an array of dates it populates the date dropdown.
+ * @param {Array} dateArr
+ */
 TimeSelector.prototype._fillDateOptions = function(dateArr) {
 
 	var dateStamps = document.getElementById(this._dateId)
@@ -65,6 +70,13 @@ TimeSelector.prototype._fillDateOptions = function(dateArr) {
 		dateStamps.appendChild(option)
 	}
 }
+
+/**
+ * Populates the time dropdown for a given date, using the map.
+ * The maps keys are the dates and each date may have one or more values
+ * associated with it.    
+ * @param {Map} map
+ */
 TimeSelector.prototype._fillTimeOptions = function (map) {
 
 	var dateStamps = document.getElementById(this._dateId)
