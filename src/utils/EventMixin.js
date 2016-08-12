@@ -54,6 +54,13 @@ function getListeners (obj) {
     return obj._listeners
 }
 
+/**
+ * creates a prototype for all the functions in the EventMixin class
+ * in the targetclass so that the target class can just call them i.e targetClass.on
+ * targetClass.off or targetClass.fire
+ * @param {Object} mixinObj
+ * @param {Class} targetClass
+ */
 function mixin (mixinObj, targetClass) {
     for (var prop in mixinObj) {
         targetClass.prototype[prop] = mixinObj[prop]
