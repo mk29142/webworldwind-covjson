@@ -9,7 +9,7 @@
  *  with a css gradient.
  */
 function createRGBString (colourValues) {
-	return "rgb(" + colourValues[0] + "," + colourValues[1] + "," + colourValues[2] + ")"
+	return "rgb(" + colourValues[0] + "," + colourValues[1] + "," + colourValues[2] + ")";
 }
 
 /**
@@ -21,16 +21,16 @@ function createRGBString (colourValues) {
  */
 function changeTitleAndUnits (cov, paramKey) {
 
-	var param = cov.parameters.get(paramKey)
-	var title = param.observedProperty.label.en
-	var categories = param.observedProperty.categories
+	var param = cov.parameters.get(paramKey);
+	var title = param.observedProperty.label.en;
+	var categories = param.observedProperty.categories;
 
 	changeHTMLText("legend-title", title)
 
 	if(!categories){
 		if(param.unit) {
-			var units = param.unit.label.en
-		changeHTMLText("legend-units", "(" + units + ")")
+			var units = param.unit.label.en;
+		changeHTMLText("legend-units", "(" + units + ")");
 	    }
 	}
 }
@@ -49,22 +49,22 @@ function clearCategoricalElements() {
  * @param{}
  */
 function clearLegend() {
-		changeHTMLText("legend-title", "")
-		changeHTMLText("legend-units", "")
+		changeHTMLText("legend-title", "");
+		changeHTMLText("legend-units", "");
 
-		clearCategoricalElements()
+		clearCategoricalElements();
 
-		var legend = document.getElementById("my-legend")
-		legend.style.visibility = "hidden"
+		var legend = document.getElementById("my-legend");
+		legend.style.visibility = "hidden";
 }
 
 function clearSelectors() {
-	var dateStamps = document.getElementById("dateStamps")
-	dateStamps.options.length = 0
-	var timeStamps = document.getElementById("timeStamps")
-	timeStamps.options.length = 0
-	var zaxis = document.getElementById("zaxis")
-	zaxis.options.length = 0
+	var dateStamps = document.getElementById("dateStamps");
+	dateStamps.options.length = 0;
+	var timeStamps = document.getElementById("timeStamps");
+	timeStamps.options.length = 0;
+	var zaxis = document.getElementById("zaxis");
+	zaxis.options.length = 0;
 }
 
 /**
@@ -76,12 +76,12 @@ function clearSelectors() {
  * @param {String} paramKey
  */
 function createLegend (cov, layer, paramKey) {
-	var param = cov.parameters.get(paramKey)
-	var allCategories = param.observedProperty.categories
+	var param = cov.parameters.get(paramKey);
+	var allCategories = param.observedProperty.categories;
 
 	if (!allCategories) {
-    return new ContinousLegend(cov, layer, paramKey)
+    return new ContinousLegend(cov, layer, paramKey);
   } else {
-    return new CategoricalLegend(cov, layer, allCategories, paramKey)
+    return new CategoricalLegend(cov, layer, allCategories, paramKey);
   }
 }

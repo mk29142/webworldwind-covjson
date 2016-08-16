@@ -115,34 +115,34 @@ CovJSONGridLayer.prototype.load = function () {
   this.cov.subsetByValue(constraints).then(function(subsetCov) {
     Promise.all([subsetCov.loadDomain(), subsetCov.loadRange(self.paramKey)]).then(function (res) {
       // console.log("here  " + constraints.t);
-      self.domain = res[0]
-      self.range = res[1]
+      self.domain = res[0];
+      self.range = res[1];
 
       self.paletteExtent = self.options.paletteExtent || CovUtils.minMaxOfRange(self.range)
-      var param = self.cov.parameters.get(self.paramKey)
-      var allCategories = param.observedProperty.categories
+      var param = self.cov.parameters.get(self.paramKey);
+      var allCategories = param.observedProperty.categories;
       //undefined means that the grid data is continous
       //and needs a range of similar colours, otherwise for
       //discrete values palette must have unique colours i.e no shades of the same colour
       if (!allCategories) {
-        self.palette = hexToRgb(palette('tol-dv', 1000))
+        self.palette = hexToRgb(palette('tol-dv', 1000));
       } else {
         if(colourDefaultPresent(allCategories)) {
-          self.palette = loadDefaultPalette(allCategories)
+          self.palette = loadDefaultPalette(allCategories);
         } else {
-          self.palette = loadNewPalette(allCategories)
+          self.palette = loadNewPalette(allCategories);
         }
       }
-      var bbox = getGridBbox(self.domain.axes)
-      self._bbox = bbox
+      var bbox = getGridBbox(self.domain.axes);
+      self._bbox = bbox;
 
-      TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256)
+      TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256);
 
-      self.fire('load')
+      self.fire('load');
     })
   })
 
-  return this
+  return this;
 }
 
 CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
@@ -287,32 +287,31 @@ CovJSONVectorLayer.prototype.load = function() {
 
         var gradient = ctx2d.createRadialGradient(c, c, innerRadius, c, c, outerRadius);
 
-        var param = self.cov.parameters.get(self.paramKey)
-        var allCategories = param.observedProperty.categories
-
+        var param = self.cov.parameters.get(self.paramKey);
+        var allCategories = param.observedProperty.categories;
 
         if (!allCategories) {
-          self.palette = hexToRgb(palette('tol-dv', 1000))
+          self.palette = hexToRgb(palette('tol-dv', 1000));
           gradient.addColorStop(0, 'rgb(255,255,224)');
         } else {
             if(colourDefaultPresent(allCategories)) {
-              self.palette = loadDefaultPalette(allCategories)
+              self.palette = loadDefaultPalette(allCategories);
             } else {
-              self.palette = loadNewPalette(allCategories)
+              self.palette = loadNewPalette(allCategories);
             }
 
             // selects the correct colour of the point from the encodings
             // and the associated palette.
-            self.cov.loadRange(self.paramKey).then(function(range) {
-
-              var encoding = param.categoryEncoding
-              var encodingVal = Array.from(encoding.values())
-              encodingVal = encodingVal.map(arr => arr[0])
-
-              var val = CovUtils.minMaxOfRange(range)[0]
-              var index = encodingVal.indexOf(val)
-              gradient.addColorStop(0, createRGBString(self.palette[index]))
-          })
+          //   self.cov.loadRange(self.paramKey).then(function(range) {
+          //
+          //     var encoding = param.categoryEncoding
+          //     var encodingVal = Array.from(encoding.values())
+          //     encodingVal = encodingVal.map(arr => arr[0])
+          //
+          //     var val = CovUtils.minMaxOfRange(range)[0]
+          //     var index = encodingVal.indexOf(val)
+          //     gradient.addColorStop(0, createRGBString(self.palette[index]))
+          // })
         }
 
         ctx2d.fillStyle = gradient;
@@ -340,7 +339,7 @@ CovJSONVectorLayer.prototype.load = function() {
         placemarkLayer.addRenderable(placemark);
         self.fire('load', placemarkLayer)
     })
-      return this
+      return this;
   }
 }
 

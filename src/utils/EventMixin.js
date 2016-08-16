@@ -13,7 +13,7 @@ var EventMixin = {}
  * @param {requestCallback} fn
  */
 EventMixin.on = function (name, fn) {
-    var listeners = getListeners(this)
+    var listeners = getListeners(this);
     if (!listeners.has(name)) {
         listeners.set(name, new Set());
     }
@@ -27,7 +27,7 @@ EventMixin.on = function (name, fn) {
  * @param {requestCallback} fn
  */
 EventMixin.off = function (name, fn) {
-    var listeners = getListeners(this)
+    var listeners = getListeners(this);
     listeners.get(name).delete(fn);
     return this;
 }
@@ -39,7 +39,7 @@ EventMixin.off = function (name, fn) {
  * @param {Object} obj
  */
 EventMixin.fire = function (name, obj) {
-    var listeners = getListeners(this)
+    var listeners = getListeners(this);
     if (!listeners.has(name)) return
     listeners.get(name).forEach(function (fn) {
       fn(obj);
@@ -49,9 +49,9 @@ EventMixin.fire = function (name, obj) {
 
 function getListeners (obj) {
     if (!obj._listeners) {
-        obj._listeners = new Map()
+        obj._listeners = new Map();
     }
-    return obj._listeners
+    return obj._listeners;
 }
 
 /**
@@ -63,6 +63,6 @@ function getListeners (obj) {
  */
 function mixin (mixinObj, targetClass) {
     for (var prop in mixinObj) {
-        targetClass.prototype[prop] = mixinObj[prop]
+        targetClass.prototype[prop] = mixinObj[prop];
     }
 }

@@ -24,8 +24,8 @@ function changeHTMLText (id, text) {
  */
 function changeLegendScale(cov, minMax) {
 
-	changeHTMLText("start", minMax[0])
-	changeHTMLText("finish", minMax[1])
+	changeHTMLText("start", minMax[0]);
+	changeHTMLText("finish", minMax[1]);
 
 }
 
@@ -39,40 +39,40 @@ function changeLegendScale(cov, minMax) {
 function ContinousLegend (cov, layer, paramKey) {
 
 	// var paramKey = cov.parameters.keys().next().value
-	var palette = layer.palette
-	var legend = document.getElementById("my-legend")
+	var palette = layer.palette;
+	var legend = document.getElementById("my-legend");
 	// console.log(cov.domainType
 	if(cov.domainType !== "http://covjson.org/def/domainTypes#Point") {
-		var minMax = CovUtils.minMaxOfRange(layer.range)
-		changeLegendScale(cov, minMax)
+		var minMax = CovUtils.minMaxOfRange(layer.range);
+		changeLegendScale(cov, minMax);
 	} else {
 		cov.loadRange(paramKey).then(function(range) {
-			var val = CovUtils.minMaxOfRange(range)[0]
-			changeLegendScale(cov, [val-10, val+10])
+			var val = CovUtils.minMaxOfRange(range)[0];
+			changeLegendScale(cov, [val-10, val+10]);
 		})
 	}
 
-	changeTitleAndUnits(cov, paramKey)
+	changeTitleAndUnits(cov, paramKey);
 
-	legend.style.display = "inline"
+	legend.style.display = "inline";
 
-	var legendBar = document.getElementById("legend-bar")
-	legendBar.style.display = "inline"
+	var legendBar = document.getElementById("legend-bar");
+	legendBar.style.display = "inline";
 
-	var lsc = document.getElementById('legend-scale-continous')
-	lsc.style.display = "inline"
+	var lsc = document.getElementById('legend-scale-continous');
+	lsc.style.display = "inline";
 
-	clearCategoricalElements()
+	clearCategoricalElements();
 
-	var colourString = ""
+	var colourString = "";
 
 	for (var i = 0; i < palette.length; i++) {
 		if (i !== palette.length - 1) {
-			colourString += createRGBString(palette[i]) + ","
+			colourString += createRGBString(palette[i]) + ",";
 		} else {
-			colourString += createRGBString(palette[i])
+			colourString += createRGBString(palette[i]);
 		}
 	}
 
-	legendBar.style.background = "linear-gradient(to top," + colourString + ")"
+	legendBar.style.background = "linear-gradient(to top," + colourString + ")";
 }

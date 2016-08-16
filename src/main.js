@@ -2,18 +2,18 @@
   (function () {
 
   // Create a World Window for the canvas.
-  var wwd = new WorldWind.WorldWindow("worldwind")
+  var wwd = new WorldWind.WorldWindow("worldwind");
 
   // Add some image layers to the World Window's globe.
-  wwd.addLayer(new WorldWind.BMNGOneImageLayer())
-  wwd.addLayer(new WorldWind.BingAerialWithLabelsLayer())
+  wwd.addLayer(new WorldWind.BMNGOneImageLayer());
+  wwd.addLayer(new WorldWind.BingAerialWithLabelsLayer());
 
   // Add a compass, a coordinates display and some view controls to the World Window.
-  wwd.addLayer(new WorldWind.CompassLayer())
-  wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd))
-  wwd.addLayer(new WorldWind.ViewControlsLayer(wwd))
+  wwd.addLayer(new WorldWind.CompassLayer());
+  wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
+  wwd.addLayer(new WorldWind.ViewControlsLayer(wwd));
 
-  window.wwd = wwd
+  window.wwd = wwd;
 
   //
   // function getParameterByName(name, url) {
@@ -29,29 +29,29 @@
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
 
-  CovJSON.read("testdata/point.covjson").then(function (cov) {
+  CovJSON.read("testdata/grid.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
-      var ps = new ParamSelector(cov)
+      var ps = new ParamSelector(cov);
 
-      var uiManager = new UIManager(wwd,cov,dom, cov.parameters.keys().next().value)
-      var layer = uiManager.getLayer()
+      var uiManager = new UIManager(wwd,cov,dom, cov.parameters.keys().next().value);
+      var layer = uiManager.getLayer();
 
-      var popup = new Popup(wwd, cov, dom).display()
+      var popup = new Popup(wwd, cov, dom).display();
 
       ps.on("change", function(val) {
         if(val == "off") {
-          wwd.removeLayer(layer)
-          clearLegend()
-          clearSelectors()
+          wwd.removeLayer(layer);
+          clearLegend();
+          clearSelectors();
         }else {
-          var legend = document.getElementById("my-legend")
-          legend.style.visibility = "visible"
-          uiManager = new UIManager(wwd,cov,dom, val)
-          layer = uiManager.getLayer()
+          var legend = document.getElementById("my-legend");
+          legend.style.visibility = "visible";
+          uiManager = new UIManager(wwd,cov,dom, val);
+          layer = uiManager.getLayer();
         }
       })
-        // wwd.goTo(new WorldWind.Position(-40.2, -5.1, 4000000))
+        // wwd.goTo(new WorldWind.Position(-40.2, -5.1, 4000000));
     })
   })
 }())

@@ -8,8 +8,8 @@ function addCategoricalElement(tag, colour) {
 	var ul = document.getElementById("labels");
 	var li = document.createElement("li");
 	var span = document.createElement("span");
-	span.setAttribute("style", "background-color: " + colour + ";")
-	li.appendChild(span)
+	span.setAttribute("style", "background-color: " + colour + ";");
+	li.appendChild(span);
 	li.appendChild(document.createTextNode(tag));
 	ul.appendChild(li);
 }
@@ -28,24 +28,24 @@ function CategoricalLegend (cov, layer, categories, paramKey) {
 
 	// var paramKey = cov.parameters.keys().next().value
 
-	clearCategoricalElements()
+	clearCategoricalElements();
 
-	var legendBar = document.getElementById("legend-bar")
-	legendBar.style.display = "none"
+	var legendBar = document.getElementById("legend-bar");
+	legendBar.style.display = "none";
 
-	var lsc = document.getElementById('legend-scale-continous')
-	lsc.style.display = "none"
+	var lsc = document.getElementById('legend-scale-continous');
+	lsc.style.display = "none";
 
-	changeTitleAndUnits(cov, paramKey)
+	changeTitleAndUnits(cov, paramKey);
 
 	if (colourDefaultPresent(categories)) {
 		for (var i = 0; i < categories.length; i++) {
-			addCategoricalElement(categories[i].label.en, categories[i].preferredColor)
+			addCategoricalElement(categories[i].label.en, categories[i].preferredColor);
 		}
 	} else {
 		for(var i = 0; i < categories.length; i++) {
-			var colour = createRGBString(layer.palette[i])
-			addCategoricalElement(categories[i].label.en, colour)
+			var colour = createRGBString(layer.palette[i]);
+			addCategoricalElement(categories[i].label.en, colour);
 		}
 	}
 }
