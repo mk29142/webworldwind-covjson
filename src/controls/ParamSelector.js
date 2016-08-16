@@ -9,7 +9,7 @@ function ParamSelector(cov) {
   for(var i = 0; i < all.length; i++) {
     all[i].addEventListener('click', function() {
 
-      //gets all other parameters and unclicks them so that only one box at
+      //gets all other parameters and unclicks them so that only one or no box at
       // a time is checked.
       var otherBoxes = arr.filter(obj => obj.id != this.id).map(obj => obj.id)
       otherBoxes.forEach(obj => document.getElementById(obj).checked = false)

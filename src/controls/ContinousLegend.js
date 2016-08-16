@@ -36,23 +36,39 @@ function changeLegendScale(cov, minMax) {
  * like temperature by extracting the colours from the layer and the key information
  * of the cateogry from the Coverage object.
  */
-function ContinousLegend (cov, layer) {
+function ContinousLegend (cov, layer, paramKey) {
 
-	var paramKey = cov.parameters.keys().next().value
+	// var paramKey = cov.parameters.keys().next().value
 	var palette = layer.palette
 	var legend = document.getElementById("my-legend")
-	var minMax = CovUtils.minMaxOfRange(layer.range)
+	// console.log(cov.domainType
+	if(cov.domainType !== "http://covjson.org/def/domainTypes#Point") {
+		var minMax = CovUtils.minMaxOfRange(layer.range)
+		changeLegendScale(cov, minMax)
+	} else {
+		cov.loadRange(paramKey).then(function(range) {
+			var val = CovUtils.minMaxOfRange(range)[0]
+			changeLegendScale(cov, [val-10, val+10])
+		})
+	}
 
-	changeTitleAndUnits(cov,paramKey)
+	changeTitleAndUnits(cov, paramKey)
 
-	changeLegendScale(cov, minMax)
-
-	legend.display = "inline"
+	legend.style.display = "inline"
 
 	var legendBar = document.getElementById("legend-bar")
-	legendBar.style.visibility = "visible"
+	legendBar.style.display = "inline"
+
 	var lsc = document.getElementById('legend-scale-continous')
-	lsc.style.visibility = "visible"
+	lsc.style.display = "inline"
+
+	//removes each categorical element in the legend
+	var ul = document.getElementById("labels");
+	if (ul) {
+		while (ul.firstChild) {
+			ul.removeChild(ul.firstChild);
+		}
+	}
 
 	var colourString = ""
 

@@ -11,8 +11,8 @@ function UIManager(wwd, cov, dom, param) {
 
   //creates the intial layer before any UI options are selected
   layer = this.createLayer({time: "", depth: ""})
-  .on('load', function () {
-    self._wwd.addLayer(layer)
+  layer.on('load', function (vectorLayer) {
+    vectorLayer ? self._wwd.addLayer(vectorLayer) : self._wwd.addLayer(layer)
   }).load()
   this._layer = layer
 

@@ -24,19 +24,15 @@ function addCategoricalElement(tag, colour) {
  * Otherwise the category is associated with a colour from the palette which had random
  * colours assigned to it during initialisation.
  */
-function CategoricalLegend (cov, layer, categories) {
+function CategoricalLegend (cov, layer, categories, paramKey) {
 
-	var paramKey = cov.parameters.keys().next().value
+	// var paramKey = cov.parameters.keys().next().value
 
 	var legendBar = document.getElementById("legend-bar")
-	if(legendBar) {
-		legendBar.parentNode.removeChild(legendBar)
-	}
+	legendBar.style.display = "none"
 
 	var lsc = document.getElementById('legend-scale-continous')
-	if(lsc) {
-		lsc.parentNode.removeChild(lsc)
-	}
+	lsc.style.display = "none"
 
 	changeTitleAndUnits(cov, paramKey)
 

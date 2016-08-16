@@ -250,40 +250,83 @@ var CovJSONVectorLayer = function (cov, options, type) {
   // TODO maybe convert coverage to GeoJSON and use GeoJSONParser, return RenderableLayer
 }
 
-// may not need to do this
-// CovJSONVectorLayer.prototype = Object.create(TiledCanvasLayer.prototype);
+CovJSONVectorLayer.prototype = Object.create(WorldWind.RenderableLayer.prototype);
 
 mixin(EventMixin, CovJSONVectorLayer)
 
 CovJSONVectorLayer.prototype.load = function() {
+
+  var self = this
+
   switch (this.type) {
-    case "Trajectory":
-  //  var layer = new WorldWind.RenderableLayer("Trajectory")
-    //loadTrajectory
-    break
     case "Point":
-      // var layer = new WorldWind.RenderableLayer("Point")
-      // var self = this
-      // Promise.all([this.cov.loadDomain(), this.cov.loadRange(self.paramKey)]).then(function (res) {
-      //   var domain = res[0]
-      //   var range = res[1]
-      //
-      //   var xCoord = domain.axes.get("x").values
-      //   var yCoord = domain.axes.get("y").values
-      //   var coordinates = [xCoord[0], yCoord[0]]
-      //   var bbox = getGridBbox(domain.axes)
-      //
-      //   var geoPoint = new WorldWind.GeoJSONGeometry(coordinates, self.type, bbox)
-      //
-      //   var geoParser = new WorldWind.GeoJSONParser("testdata/point.covjson")
-      //   // console.log(geoParser);
-      //   var addRendPoint = geoParser.addRenderablesForPoint(layer, geoPoint)
-      //   geoParser.load(addRendPoint, layer)
-      //   self.fire('load')
-      //   return layer
-      //})
-    // //loadPoint
-    break
+
+    this.cov.loadDomain().then(function(dom) {
+
+      var placemark,
+      placemarkAttributes = new WorldWind.PlacemarkAttributes(null),
+      highlightAttributes,
+      placemarkLayer = new WorldWind.RenderableLayer("Placemarks"),
+      latitude = dom.axes.get("y").values[0],
+      longitude = dom.axes.get("x").values[0];
+
+      // Set up the common placemark attributes.
+      placemarkAttributes.imageScale = 1;
+      placemarkAttributes.imageOffset = new WorldWind.Offset(
+        WorldWind.OFFSET_FRACTION, 0.5,
+        WorldWind.OFFSET_FRACTION, 0.5);
+      placemarkAttributes.imageColor = WorldWind.Color.WHITE;
+
+        // Create the custom image for the placemark.
+        var canvas = document.createElement("canvas"),
+        ctx2d = canvas.getContext("2d"),
+        size = 64, c = size / 2  - 0.5, innerRadius = 5, outerRadius = 20;
+
+        canvas.width = size;
+        canvas.height = size;
+
+        var gradient = ctx2d.createRadialGradient(c, c, innerRadius, c, c, outerRadius);
+        gradient.addColorStop(0, 'rgb(255,255,224)');
+
+        ctx2d.fillStyle = gradient;
+        ctx2d.arc(c, c, outerRadius, 0, 2 * Math.PI, false);
+        ctx2d.fill();
+
+        var param = self.cov.parameters.get(self.paramKey)
+        var allCategories = param.observedProperty.categories
+
+        if (!allCategories) {
+          self.palette = hexToRgb(palette('tol-dv', 1000))
+        } else {
+          if(colourDefaultPresent(allCategories)) {
+            self.palette = loadDefaultPalette(allCategories)
+          } else {
+            self.palette = loadNewPalette(allCategories)
+          }
+        }
+
+        // Create the placemark.
+        placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 1e2), false, null);
+        placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
+
+        // Create the placemark attributes for the placemark.
+        placemarkAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
+        // Wrap the canvas created above in an ImageSource object to specify it as the placemark image source.
+        placemarkAttributes.imageSource = new WorldWind.ImageSource(canvas);
+        placemark.attributes = placemarkAttributes;
+
+        // Create the highlight attributes for this placemark. Note that the normal attributes are specified as
+        // the default highlight attributes so that all properties are identical except the image scale. You could
+        // instead vary the color, image, or other property to control the highlight representation.
+        highlightAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
+        highlightAttributes.imageScale = 1.2;
+        placemark.highlightAttributes = highlightAttributes;
+
+        // Add the placemark to the layer.
+        placemarkLayer.addRenderable(placemark);
+        self.fire('load', placemarkLayer)
+    })
+      return this
   }
 }
 

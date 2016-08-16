@@ -49,15 +49,15 @@ function clearLegend() {
 			}
 		}
 
-		var legendBar = document.getElementById("legend-bar")
-		if(legendBar) {
-      legendBar.style.visibility = "hidden"
-		}
-
-		var lsc = document.getElementById('legend-scale-continous')
-		if(lsc) {
-      lsc.style.visibility = "hidden"
-		}
+		// var legendBar = document.getElementById("legend-bar")
+		// if(legendBar) {
+    //   legendBar.style.visibility = "hidden"
+		// }
+		//
+		// var lsc = document.getElementById('legend-scale-continous')
+		// if(lsc) {
+    //   lsc.style.visibility = "hidden"
+		// }
 
 		var legend = document.getElementById("my-legend")
 		legend.style.visibility = "hidden"
@@ -85,8 +85,8 @@ function createLegend (cov, layer, paramKey) {
 	var allCategories = param.observedProperty.categories
 
 	if (!allCategories) {
-    return new ContinousLegend(cov, layer)
+    return new ContinousLegend(cov, layer, paramKey)
   } else {
-    return new CategoricalLegend(cov, layer, allCategories)
+    return new CategoricalLegend(cov, layer, allCategories, paramKey)
   }
 }
