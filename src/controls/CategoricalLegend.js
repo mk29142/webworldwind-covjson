@@ -28,6 +28,8 @@ function CategoricalLegend (cov, layer, categories, paramKey) {
 
 	// var paramKey = cov.parameters.keys().next().value
 
+	clearCategoricalElements()
+
 	var legendBar = document.getElementById("legend-bar")
 	legendBar.style.display = "none"
 

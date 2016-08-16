@@ -62,13 +62,7 @@ function ContinousLegend (cov, layer, paramKey) {
 	var lsc = document.getElementById('legend-scale-continous')
 	lsc.style.display = "inline"
 
-	//removes each categorical element in the legend
-	var ul = document.getElementById("labels");
-	if (ul) {
-		while (ul.firstChild) {
-			ul.removeChild(ul.firstChild);
-		}
-	}
+	clearCategoricalElements()
 
 	var colourString = ""
 

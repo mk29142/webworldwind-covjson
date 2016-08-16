@@ -34,6 +34,16 @@ function changeTitleAndUnits (cov, paramKey) {
 	    }
 	}
 }
+
+function clearCategoricalElements() {
+	var ul = document.getElementById("labels");
+	if (ul) {
+		while (ul.firstChild) {
+			ul.removeChild(ul.firstChild);
+		}
+	}
+}
+
 /**
  * Clears everything in the legend for when a parameter is switched off.
  * @param{}
@@ -42,22 +52,7 @@ function clearLegend() {
 		changeHTMLText("legend-title", "")
 		changeHTMLText("legend-units", "")
 
-		var ul = document.getElementById("labels");
-		if (ul) {
-			while (ul.firstChild) {
-				ul.removeChild(ul.firstChild);
-			}
-		}
-
-		// var legendBar = document.getElementById("legend-bar")
-		// if(legendBar) {
-    //   legendBar.style.visibility = "hidden"
-		// }
-		//
-		// var lsc = document.getElementById('legend-scale-continous')
-		// if(lsc) {
-    //   lsc.style.visibility = "hidden"
-		// }
+		clearCategoricalElements()
 
 		var legend = document.getElementById("my-legend")
 		legend.style.visibility = "hidden"
