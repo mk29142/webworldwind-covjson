@@ -286,24 +286,38 @@ CovJSONVectorLayer.prototype.load = function() {
         canvas.height = size;
 
         var gradient = ctx2d.createRadialGradient(c, c, innerRadius, c, c, outerRadius);
-        gradient.addColorStop(0, 'rgb(255,255,224)');
-
-        ctx2d.fillStyle = gradient;
-        ctx2d.arc(c, c, outerRadius, 0, 2 * Math.PI, false);
-        ctx2d.fill();
 
         var param = self.cov.parameters.get(self.paramKey)
         var allCategories = param.observedProperty.categories
 
+
         if (!allCategories) {
           self.palette = hexToRgb(palette('tol-dv', 1000))
+          gradient.addColorStop(0, 'rgb(255,255,224)');
         } else {
-          if(colourDefaultPresent(allCategories)) {
-            self.palette = loadDefaultPalette(allCategories)
-          } else {
-            self.palette = loadNewPalette(allCategories)
-          }
+            if(colourDefaultPresent(allCategories)) {
+              self.palette = loadDefaultPalette(allCategories)
+            } else {
+              self.palette = loadNewPalette(allCategories)
+            }
+
+            // selects the correct colour of the point from the encodings
+            // and the associated palette.
+            self.cov.loadRange(self.paramKey).then(function(range) {
+
+              var encoding = param.categoryEncoding
+              var encodingVal = Array.from(encoding.values())
+              encodingVal = encodingVal.map(arr => arr[0])
+
+              var val = CovUtils.minMaxOfRange(range)[0]
+              var index = encodingVal.indexOf(val)
+              gradient.addColorStop(0, createRGBString(self.palette[index]))
+          })
         }
+
+        ctx2d.fillStyle = gradient;
+        ctx2d.arc(c, c, outerRadius, 0, 2 * Math.PI, false);
+        ctx2d.fill();
 
         // Create the placemark.
         placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 1e2), false, null);
