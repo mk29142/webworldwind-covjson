@@ -20,7 +20,7 @@ function ParamSelector(cov) {
         //if this box has been unchecked then it fires a special string to indicate this action
         self.fire("change", "off");
       }
-    })
+    });
   }
 }
 
@@ -52,6 +52,6 @@ ParamSelector.prototype.initParams = function() {
 
    document.getElementById(params[0]).checked = true;
    this._paramKey = params[0];
- }
+ };
 
 mixin(EventMixin, ParamSelector);

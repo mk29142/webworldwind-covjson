@@ -29,7 +29,7 @@
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
 
-  CovJSON.read("testdata/grid.covjson").then(function (cov) {
+  CovJSON.read("testdata/multiTime.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
       var ps = new ParamSelector(cov);
@@ -41,17 +41,17 @@
 
       ps.on("change", function(val) {
         if(val == "off") {
-          wwd.removeLayer(layer);
           clearLegend();
           clearSelectors();
+          wwd.removeLayer(layer);
         }else {
           var legend = document.getElementById("my-legend");
           legend.style.visibility = "visible";
           uiManager = new UIManager(wwd,cov,dom, val);
           layer = uiManager.getLayer();
         }
-      })
+      });
         // wwd.goTo(new WorldWind.Position(-40.2, -5.1, 4000000));
-    })
-  })
-}())
+    });
+  });
+}());

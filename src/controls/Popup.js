@@ -71,7 +71,7 @@ Popup.prototype.display = function() {
         }
         popup.innerText = txt.textContent;
 
-      })
-    })
-  })
+      });
+    });
+  });
 }

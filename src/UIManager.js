@@ -9,20 +9,24 @@ function UIManager(wwd, cov, dom, param) {
   var timeAxis = dom.axes.get("t");
   var zaxis = dom.axes.get("z");
 
-  //creates the intial layer before any UI options are selected
-  layer = this.createLayer({time: "", depth: ""});
-  layer.on('load', function (vectorLayer) {
-    vectorLayer ? self._wwd.addLayer(vectorLayer) : self._wwd.addLayer(layer);
-  }).load();
-  this._layer = layer;
-
-  if(timeAxis) {
+  if(!timeAxis && !zaxis) {
+    //creates the intial layer before any UI options are selected
+    layer = this.createLayer({time: "", depth: ""});
+    layer.on('load', function (vectorLayer) {
+      vectorLayer ? self._wwd.addLayer(vectorLayer) : self._wwd.addLayer(layer);
+    }).load();
+    this._layer = layer;
+  } else if(timeAxis && !zaxis) {
+    // this._wwd.removeLayer(this._layer);
     this._layer = this.runTimeSelector(timeAxis);
-  }
-  if(zaxis) {
+  } else if(!timeAxis && zaxis ) {
+    // this._wwd.removeLayer(this._layer);
     this._layer = this.runDepthSelector(zaxis);
-    // console.log(this._depth);
+  } else {
+    this._layer = this.runSelectors(timeAxis, zaxis)
   }
+
+
 }
 /**
  * Runs the time UI, firstly creates the layer based
@@ -43,11 +47,13 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
   var date = dateStamps.options[dateStamps.selectedIndex].value;
   var time = timeStamps.options[timeStamps.selectedIndex].value;
 
-  layer = this.createLayer({time: date + "T" + time})
+  // this._wwd.removeLayer(this._layer);
+  var layer = this.createLayer({time: date + "T" + time})
   .on('load', function () {
     self._wwd.addLayer(layer)
   }).load();
   this._fullTime = date + "T" + time;
+
 
   timeSelector.on("change", function (time) {
     self._wwd.removeLayer(layer);
@@ -56,7 +62,7 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
       self._wwd.addLayer(layer);
     }).load();
     this._fullTime = time;
-  })
+  });
   return layer;
 }
 
@@ -85,7 +91,8 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
 
     var currDepth = depthStamps.options[depthStamps.selectedIndex].value;
 
-    layer = this.createLayer({depth: currDepth})
+    // this._wwd.removeLayer(this._layer);
+    var layer = this.createLayer({depth: currDepth})
     .on('load', function () {
       self._wwd.addLayer(layer)
     }).load();
@@ -98,10 +105,57 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
         self._wwd.addLayer(layer);
       }).load();
       this._depth = depth;
-    })
+    });
     return layer;
   }
 }
+
+UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
+
+  var self = this;
+
+  var values = timeAxis.values;
+
+  timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"});
+
+  var dateStamps = document.getElementById("dateStamps");
+  var timeStamps = document.getElementById("timeStamps");
+
+  var date = dateStamps.options[dateStamps.selectedIndex].value;
+  var time = timeStamps.options[timeStamps.selectedIndex].value;
+
+  var values = zaxis.values;
+
+  depthSelector = new DepthSelector(values, {zaxisID: "zaxis"});
+
+  var depthStamps = document.getElementById("zaxis");
+
+  var currDepth = depthStamps.options[depthStamps.selectedIndex].value;
+
+  var layer = this.createLayer({time: date + "T" + time, depth: currDepth})
+  .on('load', function () {
+    self._wwd.addLayer(layer)
+  }).load();
+  this._depth = currDepth;
+  this._fullTime = date + "T" + time;
+
+  timeSelector.on("change", function(time) {
+
+    self._wwd.addLayer(layer)
+
+    depthSelector.on("change", function(depth) {
+
+      layer = self.createLayer({time: time.value, depth: depth.value})
+      .on('load', function () {
+        self._wwd.addLayer(layer);
+      }).load();
+      this._depth = depth;
+    });
+    this._fullTime = time;
+  });
+
+  return layer;
+};
 
 /**
  * Creates a new layer with specific attributes
@@ -118,7 +172,7 @@ UIManager.prototype.createLayer = function(options) {
     depth: options.depth
   }).on('load', function () {
     this._legend = createLegend(cov, layer, self._param);
-  })
+  });
   return layer;
 }
 

@@ -50,9 +50,9 @@ function TimeSelector(values, options) {
 
 		timeStamps.addEventListener("change", function() {
 			self.fire("change", {value: date + "T" + time});
-		})
+		});
 
-    })
+	});
 }
 
 /**
@@ -69,7 +69,7 @@ TimeSelector.prototype._fillDateOptions = function(dateArr) {
 		option.appendChild(document.createTextNode(dateArr[i]));
 		dateStamps.appendChild(option);
 	}
-}
+};
 
 /**
  * Populates the time dropdown for a given date, using the map.
@@ -93,6 +93,6 @@ TimeSelector.prototype._fillTimeOptions = function (map) {
 		option.appendChild(document.createTextNode(times[i]));
 		timeStamps.appendChild(option);
 	}
-}
+};
 
 mixin(EventMixin, TimeSelector);

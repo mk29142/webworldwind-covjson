@@ -9,7 +9,7 @@ function DepthSelector(values, options) {
 
 	depthStamps.addEventListener("change" , function() {
 		self.fire("change", {value: this.value});
-    })
+	});
 }
 /**
  * Populates the dropdown menu for the depth
@@ -27,6 +27,6 @@ DepthSelector.prototype._fillDepthOptions = function (values) {
 		option.appendChild(document.createTextNode(values[i]));
 		depthStamps.appendChild(option);
 	}
-}
+};
 
 mixin(EventMixin, DepthSelector);

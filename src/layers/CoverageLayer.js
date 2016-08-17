@@ -96,7 +96,7 @@ var CovJSONGridLayer = function (cov, options) {
 
 CovJSONGridLayer.prototype = Object.create(TiledCanvasLayer.prototype);
 
-mixin(EventMixin, CovJSONGridLayer)
+mixin(EventMixin, CovJSONGridLayer);
 
 CovJSONGridLayer.prototype.load = function () {
   var self = this
@@ -143,7 +143,7 @@ CovJSONGridLayer.prototype.load = function () {
   })
 
   return this;
-}
+};
 
 CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
   var ctx = canvas.getContext('2d')
@@ -338,10 +338,10 @@ CovJSONVectorLayer.prototype.load = function() {
         // Add the placemark to the layer.
         placemarkLayer.addRenderable(placemark);
         self.fire('load', placemarkLayer)
-    })
+    });
       return this;
   }
-}
+};
 
 var COVJSON_NS = 'http://covjson.org/def/domainTypes#'
 var CovJSONVectorDomainTypes = [
