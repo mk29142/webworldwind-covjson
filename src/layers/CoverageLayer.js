@@ -295,7 +295,7 @@ CovJSONVectorLayer.prototype._loadPoint = function(options) {
       // Create the custom image for the placemark.
       var canvas = document.createElement("canvas"),
       ctx2d = canvas.getContext("2d"),
-      size = 64, c = size / 2  - 0.5, innerRadius = 5, outerRadius = 20;
+      size = 64, c = size / 2  - 0.5, innerRadius = 2.5, outerRadius = 10;
 
       canvas.width = size;
       canvas.height = size;
@@ -316,7 +316,7 @@ CovJSONVectorLayer.prototype._loadPoint = function(options) {
       self.cov.loadRange(self.paramKey).then(function(range) {
         var val = CovUtils.minMaxOfRange(range);
 
-        var paletteExtent = allCategories ? val : [val[0] - 10, val[0] + 10]
+        var paletteExtent = allCategories ? val : [val[0] - 10, val[0] + 10];
 
         var colourindex;
         var colour;
@@ -332,18 +332,12 @@ CovJSONVectorLayer.prototype._loadPoint = function(options) {
           colour = self.palette[colourindex];
         }
 
-
-        // console.log(colour);
         var gradient = ctx2d.createRadialGradient(c, c, innerRadius, c, c, outerRadius);
-        // gradient.addColorStop(0, 'rgb(255,0,0)');
         gradient.addColorStop(0, createRGBString(colour));
         ctx2d.fillStyle = gradient;
         ctx2d.arc(c, c, outerRadius, 0, 2 * Math.PI, false);
         ctx2d.fill();
       });
-
-
-
 
       // Create the placemark.
       placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 1e2), false, null);
@@ -408,8 +402,10 @@ CovJSONVectorLayer.prototype._loadTrajectory = function() {
         }
     }
 
-
-
+    for(let i = 0; i < lats.length; i++) {
+      var pointLayer = self._loadPoint({x: lons[i], y: lats[i]});
+      polyLineLayer.addRenderable(pointLayer);
+    }
 
     surfacePolyLine = new WorldWind.SurfacePolyline(coord, null);
     surfacePolyLine.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
