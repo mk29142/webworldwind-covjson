@@ -64,7 +64,7 @@ Popup.prototype.display = function() {
         popup.style.left = xPosition+'px';
         popup.style.top = yPosition+'px';
 
-        var	txt = document.createTextNode(property + ": " + val);
+        var	txt = document.createTextNode(val);
 
         if(!val) {
           txt = document.createTextNode("No data");

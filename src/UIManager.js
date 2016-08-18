@@ -9,23 +9,30 @@ function UIManager(wwd, cov, dom, param) {
   var timeAxis = dom.axes.get("t");
   var zaxis = dom.axes.get("z");
 
+ var layer = this.createLayer({time: "", depth: ""});
+  layer.on('load', function (vectorLayer) {
+    vectorLayer ? self._wwd.addLayer(vectorLayer) : self._wwd.addLayer(layer);
+  }).load();
+  this._layer = layer;
   if(!timeAxis && !zaxis) {
     //creates the intial layer before any UI options are selected
+    this._wwd.removeLayer(this._layer)
     layer = this.createLayer({time: "", depth: ""});
     layer.on('load', function (vectorLayer) {
       vectorLayer ? self._wwd.addLayer(vectorLayer) : self._wwd.addLayer(layer);
     }).load();
-    this._layer = layer;
+
+    this._layer = layer
   } else if(timeAxis && !zaxis) {
-    // this._wwd.removeLayer(this._layer);
+    this._wwd.removeLayer(this._layer)
     this._layer = this.runTimeSelector(timeAxis);
-  } else if(!timeAxis && zaxis ) {
-    // this._wwd.removeLayer(this._layer);
+  } else if(!timeAxis && zaxis) {
+    this._wwd.removeLayer(this._layer)
     this._layer = this.runDepthSelector(zaxis);
   } else {
-    this._layer = this.runSelectors(timeAxis, zaxis)
+    this._wwd.removeLayer(this._layer)
+    this._layer = this.runSelectors(timeAxis, zaxis);
   }
-
 
 }
 /**
@@ -47,15 +54,22 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
   var date = dateStamps.options[dateStamps.selectedIndex].value;
   var time = timeStamps.options[timeStamps.selectedIndex].value;
 
+  var timeString;
   // this._wwd.removeLayer(this._layer);
-  var layer = this.createLayer({time: date + "T" + time})
+  if(time == "undefined") {
+     timeString = date;
+  } else {
+    timeString = date + "T" + time;
+  }
+  var layer = this.createLayer({time: timeString})
   .on('load', function () {
-    self._wwd.addLayer(layer)
+    self._wwd.addLayer(layer);
   }).load();
+
   this._fullTime = date + "T" + time;
 
-
   timeSelector.on("change", function (time) {
+
     self._wwd.removeLayer(layer);
     layer = self.createLayer({time: time.value})
     .on('load', function () {
@@ -136,6 +150,7 @@ UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
   .on('load', function () {
     self._wwd.addLayer(layer)
   }).load();
+
   this._depth = currDepth;
   this._fullTime = date + "T" + time;
 

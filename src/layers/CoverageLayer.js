@@ -96,7 +96,7 @@ var CovJSONGridLayer = function (cov, options) {
 
 CovJSONGridLayer.prototype = Object.create(TiledCanvasLayer.prototype);
 
-mixin(EventMixin, CovJSONGridLayer);
+mixin(EventMixin, CovJSONGridLayer)
 
 CovJSONGridLayer.prototype.load = function () {
   var self = this
@@ -115,35 +115,35 @@ CovJSONGridLayer.prototype.load = function () {
   this.cov.subsetByValue(constraints).then(function(subsetCov) {
     Promise.all([subsetCov.loadDomain(), subsetCov.loadRange(self.paramKey)]).then(function (res) {
       // console.log("here  " + constraints.t);
-      self.domain = res[0];
-      self.range = res[1];
+      self.domain = res[0]
+      self.range = res[1]
 
       self.paletteExtent = self.options.paletteExtent || CovUtils.minMaxOfRange(self.range)
-      var param = self.cov.parameters.get(self.paramKey);
-      var allCategories = param.observedProperty.categories;
+      var param = self.cov.parameters.get(self.paramKey)
+      var allCategories = param.observedProperty.categories
       //undefined means that the grid data is continous
       //and needs a range of similar colours, otherwise for
       //discrete values palette must have unique colours i.e no shades of the same colour
       if (!allCategories) {
-        self.palette = hexToRgb(palette('tol-dv', 1000));
+        self.palette = hexToRgb(palette('tol-dv', 1000))
       } else {
         if(colourDefaultPresent(allCategories)) {
-          self.palette = loadDefaultPalette(allCategories);
+          self.palette = loadDefaultPalette(allCategories)
         } else {
-          self.palette = loadNewPalette(allCategories);
+          self.palette = loadNewPalette(allCategories)
         }
       }
-      var bbox = getGridBbox(self.domain.axes);
-      self._bbox = bbox;
+      var bbox = getGridBbox(self.domain.axes)
+      self._bbox = bbox
 
-      TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256);
+      TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256)
 
-      self.fire('load');
+      self.fire('load')
     })
   })
 
-  return this;
-};
+  return this
+}
 
 CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
   var ctx = canvas.getContext('2d')
@@ -252,7 +252,7 @@ var CovJSONVectorLayer = function (cov, options, type) {
 
 CovJSONVectorLayer.prototype = Object.create(WorldWind.RenderableLayer.prototype);
 
-mixin(EventMixin, CovJSONVectorLayer)
+mixin(EventMixin, CovJSONVectorLayer);
 
 CovJSONVectorLayer.prototype.load = function() {
 
@@ -260,87 +260,164 @@ CovJSONVectorLayer.prototype.load = function() {
 
   switch (this.type) {
     case "Point":
+      return this._loadPoint();
+    case "Trajectory":
+      return this._loadTrajectory();
+  }
+}
 
-    this.cov.loadDomain().then(function(dom) {
+CovJSONVectorLayer.prototype._loadPoint = function(options) {
 
-      var placemark,
-      placemarkAttributes = new WorldWind.PlacemarkAttributes(null),
-      highlightAttributes,
-      placemarkLayer = new WorldWind.RenderableLayer("Placemarks"),
-      latitude = dom.axes.get("y").values[0],
+  var self = this;
+
+  this.cov.loadDomain().then(function(dom) {
+
+    var placemark,
+    placemarkAttributes = new WorldWind.PlacemarkAttributes(null),
+    highlightAttributes,
+    placemarkLayer = new WorldWind.RenderableLayer("Placemarks");
+
+    if(!options) {
+      latitude = dom.axes.get("y").values[0];
       longitude = dom.axes.get("x").values[0];
+    } else {
+      latitude = options.y;
+      longitude = options.x;
+    }
 
-      // Set up the common placemark attributes.
-      placemarkAttributes.imageScale = 1;
-      placemarkAttributes.imageOffset = new WorldWind.Offset(
-        WorldWind.OFFSET_FRACTION, 0.5,
-        WorldWind.OFFSET_FRACTION, 0.5);
-      placemarkAttributes.imageColor = WorldWind.Color.WHITE;
+    // Set up the common placemark attributes.
+    placemarkAttributes.imageScale = 1;
+    placemarkAttributes.imageOffset = new WorldWind.Offset(
+      WorldWind.OFFSET_FRACTION, 0.5,
+      WorldWind.OFFSET_FRACTION, 0.5);
+    placemarkAttributes.imageColor = WorldWind.Color.WHITE;
 
-        // Create the custom image for the placemark.
-        var canvas = document.createElement("canvas"),
-        ctx2d = canvas.getContext("2d"),
-        size = 64, c = size / 2  - 0.5, innerRadius = 5, outerRadius = 20;
+      // Create the custom image for the placemark.
+      var canvas = document.createElement("canvas"),
+      ctx2d = canvas.getContext("2d"),
+      size = 64, c = size / 2  - 0.5, innerRadius = 5, outerRadius = 20;
 
-        canvas.width = size;
-        canvas.height = size;
+      canvas.width = size;
+      canvas.height = size;
 
-        var gradient = ctx2d.createRadialGradient(c, c, innerRadius, c, c, outerRadius);
+      var param = self.cov.parameters.get(self.paramKey)
+      var allCategories = param.observedProperty.categories
 
-        var param = self.cov.parameters.get(self.paramKey);
-        var allCategories = param.observedProperty.categories;
-
-        if (!allCategories) {
-          self.palette = hexToRgb(palette('tol-dv', 1000));
-          gradient.addColorStop(0, 'rgb(255,255,224)');
+      if (!allCategories) {
+        self.palette = hexToRgb(palette('tol-dv', 1000))
+      } else {
+        if(colourDefaultPresent(allCategories)) {
+          self.palette = loadDefaultPalette(allCategories)
         } else {
-            if(colourDefaultPresent(allCategories)) {
-              self.palette = loadDefaultPalette(allCategories);
-            } else {
-              self.palette = loadNewPalette(allCategories);
-            }
+          self.palette = loadNewPalette(allCategories)
+        }
+      }
 
-            // selects the correct colour of the point from the encodings
-            // and the associated palette.
-          //   self.cov.loadRange(self.paramKey).then(function(range) {
-          //
-          //     var encoding = param.categoryEncoding
-          //     var encodingVal = Array.from(encoding.values())
-          //     encodingVal = encodingVal.map(arr => arr[0])
-          //
-          //     var val = CovUtils.minMaxOfRange(range)[0]
-          //     var index = encodingVal.indexOf(val)
-          //     gradient.addColorStop(0, createRGBString(self.palette[index]))
-          // })
+      self.cov.loadRange(self.paramKey).then(function(range) {
+        var val = CovUtils.minMaxOfRange(range);
+
+        var paletteExtent = allCategories ? val : [val[0] - 10, val[0] + 10]
+
+        var colourindex;
+        var colour;
+
+        if(!allCategories) {
+          colourindex = scale(val[0], self.palette, paletteExtent);
+          colour = self.palette[colourindex];
+        }else {
+          var arr = Array.from(param.categoryEncoding.values());
+          arr = arr.map(elem => elem[0]);
+
+          colourindex = arr.indexOf(val[0]);
+          colour = self.palette[colourindex];
         }
 
+
+        // console.log(colour);
+        var gradient = ctx2d.createRadialGradient(c, c, innerRadius, c, c, outerRadius);
+        // gradient.addColorStop(0, 'rgb(255,0,0)');
+        gradient.addColorStop(0, createRGBString(colour));
         ctx2d.fillStyle = gradient;
         ctx2d.arc(c, c, outerRadius, 0, 2 * Math.PI, false);
         ctx2d.fill();
+      });
 
-        // Create the placemark.
-        placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 1e2), false, null);
-        placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
 
-        // Create the placemark attributes for the placemark.
-        placemarkAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
-        // Wrap the canvas created above in an ImageSource object to specify it as the placemark image source.
-        placemarkAttributes.imageSource = new WorldWind.ImageSource(canvas);
-        placemark.attributes = placemarkAttributes;
 
-        // Create the highlight attributes for this placemark. Note that the normal attributes are specified as
-        // the default highlight attributes so that all properties are identical except the image scale. You could
-        // instead vary the color, image, or other property to control the highlight representation.
-        highlightAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
-        highlightAttributes.imageScale = 1.2;
-        placemark.highlightAttributes = highlightAttributes;
 
-        // Add the placemark to the layer.
-        placemarkLayer.addRenderable(placemark);
-        self.fire('load', placemarkLayer)
-    });
-      return this;
-  }
+      // Create the placemark.
+      placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 1e2), false, null);
+      placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
+
+      // Create the placemark attributes for the placemark.
+      placemarkAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
+      // Wrap the canvas created above in an ImageSource object to specify it as the placemark image source.
+      placemarkAttributes.imageSource = new WorldWind.ImageSource(canvas);
+      placemark.attributes = placemarkAttributes;
+
+      // Create the highlight attributes for this placemark. Note that the normal attributes are specified as
+      // the default highlight attributes so that all properties are identical except the image scale. You could
+      // instead vary the color, image, or other property to control the highlight representation.
+      highlightAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
+      highlightAttributes.imageScale = 1.2;
+      placemark.highlightAttributes = highlightAttributes;
+
+      // Add the placemark to the layer.
+      placemarkLayer.addRenderable(placemark);
+      self.fire('load', placemarkLayer);
+  });
+    return this;
+};
+
+CovJSONVectorLayer.prototype._loadTrajectory = function() {
+
+  var self = this;
+  var polyLineLayer = new WorldWind.RenderableLayer("SurfacePolyLine");
+  var attributes = new WorldWind.ShapeAttributes(null);
+  var highlightAttributes;
+  var surfacePolyLine;
+
+  this.cov.loadDomain().then(function(dom) {
+    var axis = dom.axes.get("composite");
+    var latIndex = axis.components.indexOf("y");
+    var lonIndex = axis.components.indexOf("x");
+
+    var coord = [];
+    var lats = [];
+    var lons = [];
+
+    for(let i = 0; i < axis.values.length; i++) {
+      let x = axis.values[i][lonIndex];
+      let y = axis.values[i][latIndex];
+      let point = new WorldWind.Location(y, x);
+      coord.push(point);
+      lats.push(y);
+      lons.push(x);
+    }
+
+    var param = self.cov.parameters.get(self.paramKey);
+    var allCategories = param.observedProperty.categories;
+
+    if (!allCategories) {
+      self.palette = hexToRgb(palette('tol-dv', 1000))
+    } else {
+        if(colourDefaultPresent(allCategories)) {
+          self.palette = loadDefaultPalette(allCategories)
+        } else {
+          self.palette = loadNewPalette(allCategories)
+        }
+    }
+
+
+
+
+    surfacePolyLine = new WorldWind.SurfacePolyline(coord, null);
+    surfacePolyLine.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
+
+    polyLineLayer.addRenderable(surfacePolyLine);
+    self.fire("load", polyLineLayer);
+  });
+  return this;
 };
 
 var COVJSON_NS = 'http://covjson.org/def/domainTypes#'

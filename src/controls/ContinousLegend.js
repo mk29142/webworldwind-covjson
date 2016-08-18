@@ -42,15 +42,16 @@ function ContinousLegend (cov, layer, paramKey) {
 	var palette = layer.palette;
 	var legend = document.getElementById("my-legend");
 	// console.log(cov.domainType
-	if(cov.domainType !== "http://covjson.org/def/domainTypes#Point") {
-		var minMax = CovUtils.minMaxOfRange(layer.range);
-		changeLegendScale(cov, minMax);
-	} else {
-		cov.loadRange(paramKey).then(function(range) {
-			var val = CovUtils.minMaxOfRange(range)[0];
-			changeLegendScale(cov, [val-10, val+10]);
-		})
-	}
+
+
+	cov.loadRange(paramKey).then(function(range) {
+		var val = CovUtils.minMaxOfRange(range);
+		if(cov.domainType !== "http://covjson.org/def/domainTypes#Point") {
+			changeLegendScale(cov, val);
+		} else {
+				changeLegendScale(cov, [val[0] - 10, val[0] + 10]);
+		}
+})
 
 	changeTitleAndUnits(cov, paramKey);
 
