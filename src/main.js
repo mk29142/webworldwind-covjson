@@ -34,20 +34,20 @@
     cov.loadDomain().then(function(dom) {
       var ps = new CJ360.ParamSelector(cov);
 
-      var uiManager = new CJ360.UIManager(wwd,cov,dom, cov.parameters.keys().next().value);
+      var uiManager = new CJ360.UIManager(wwd,cov,dom, cov.parameters.keys().next().value, "my-legend");
       var layer = uiManager.getLayer();
 
       var popup = new CJ360.Popup(wwd, cov, dom).display();
 
       ps.on("change", function(val) {
         if(val == "off") {
-          CJ360.clearLegend();
+          CJ360.clearLegend("my-legend");
           CJ360.clearSelectors();
           wwd.removeLayer(layer);
         }else {
           var legend = document.getElementById("my-legend");
           legend.style.visibility = "visible";
-          uiManager = new CJ360.UIManager(wwd, cov, dom, val);
+          uiManager = new CJ360.UIManager(wwd, cov, dom, val, "my-legend");
           layer = uiManager.getLayer();
         }
       });
