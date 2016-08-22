@@ -1,22 +1,6 @@
 var CJ360 = window.CJ360 || {};
 
 /**
- * @param {String} tag
- * @param {Integer} colour (colour is in hex code)
- * Created a li object and a span for the colour of the
- * category and adds it to the main div in the html.
- */
-CJ360.addCategoricalElement = function (tag, colour) {
-	var ul = document.getElementById("labels");
-	var li = document.createElement("li");
-	var span = document.createElement("span");
-	span.setAttribute("style", "background-color: " + colour + ";");
-	li.appendChild(span);
-	li.appendChild(document.createTextNode(tag));
-	ul.appendChild(li);
-};
-
-/**
  * @param {Coverage} cov
  * @param {CoverageJSONLayer} layer
  * @param {Array} categories
@@ -26,9 +10,10 @@ CJ360.addCategoricalElement = function (tag, colour) {
  * Otherwise the category is associated with a colour from the palette which had random
  * colours assigned to it during initialisation.
  */
-CJ360.CategoricalLegend = function (cov, layer, categories, paramKey) {
+CJ360.CategoricalLegend = function (cov, layer, categories, paramKey, legendid) {
 
-	// var paramKey = cov.parameters.keys().next().value
+	this._legendID = legendid;
+	this._legendContainer = document.getElementById(legendid);
 
 	CJ360.clearCategoricalElements();
 
@@ -42,12 +27,29 @@ CJ360.CategoricalLegend = function (cov, layer, categories, paramKey) {
 
 	if (CJ360.colourDefaultPresent(categories)) {
 		for (var i = 0; i < categories.length; i++) {
-			CJ360.addCategoricalElement(categories[i].label.en, categories[i].preferredColor);
+			this.addCategoricalElement(categories[i].label.en, categories[i].preferredColor);
 		}
 	} else {
 		for(var i = 0; i < categories.length; i++) {
 			var colour = CJ360.createRGBString(layer.palette[i]);
-			CJ360.addCategoricalElement(categories[i].label.en, colour);
+			this.addCategoricalElement(categories[i].label.en, colour);
 		}
 	}
+};
+
+/**
+ * @param {String} tag
+ * @param {Integer} colour (colour is in hex code)
+ * Created a li object and a span for the colour of the
+ * category and adds it to the main div in the html.
+ */
+CJ360.CategoricalLegend.prototype.addCategoricalElement = function (tag, colour) {
+
+	var ul = this._legendContainer.querySelector(".legend-labels");
+	var li = document.createElement("li");
+	var span = document.createElement("span");
+	span.setAttribute("style", "background-color: " + colour + ";");
+	li.appendChild(span);
+	li.appendChild(document.createTextNode(tag));
+	ul.appendChild(li);
 };

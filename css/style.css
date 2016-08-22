@@ -1,5 +1,5 @@
 
- #my-legend #legend-title #legend-units {
+ .my-legend .legend-title .legend-units {
     text-align: left;
     margin-bottom: 8px;
     font-weight: bold;
@@ -7,13 +7,13 @@
     height: 50%
     }
 
-  #my-legend #legend-bar {
+  .my-legend .legend-bar {
     height: 250px;
     width: 15px;
     text-align: left;
     float: left;
     }
-  #my-legend {
+  .my-legend {
     position: absolute;
     color: #777;
     top: 250px;

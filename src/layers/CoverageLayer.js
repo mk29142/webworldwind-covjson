@@ -60,7 +60,7 @@ CJ360.loadDefaultPalette = function (categories) {
     newPalette[i] = categories[i].preferredColor.substr(1);
   };
 
-  return hexToRgb(newPalette);
+  return CJ360.hexToRgb(newPalette);
 };
 
 /**

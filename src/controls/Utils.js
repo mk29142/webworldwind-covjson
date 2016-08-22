@@ -20,10 +20,9 @@ CJ360.createRGBString = function (colourValues) {
  *  Dynamically changes the text in an HTML
  *  div given by the id.
  */
-CJ360.changeHTMLText = function (id, text) {
-
-	// console.log(id);
-	var span = document.getElementById(id);
+CJ360.changeHTMLText = function (id, text, legendid) {
+	var container = document.getElementById(legendid);
+	var span = container.querySelector("." + id);
 	var	txt = document.createTextNode(text);
 	span.innerText = txt.textContent;
 };
@@ -35,24 +34,24 @@ CJ360.changeHTMLText = function (id, text) {
  * specified by the coverageJSON file and if it continous it
  * adds in the units of the data i.e Degrees Celcius for Temperature
  */
-CJ360.changeTitleAndUnits = function (cov, paramKey) {
+CJ360.changeTitleAndUnits = function (cov, paramKey, legendid) {
 
 	var param = cov.parameters.get(paramKey);
 	var title = param.observedProperty.label.en;
 	var categories = param.observedProperty.categories;
 
-	CJ360.changeHTMLText("legend-title", title);
+	CJ360.changeHTMLText("legend-title", title, legendid);
 
 	if(!categories){
 		if(param.unit) {
 			var units = param.unit.label.en;
-		CJ360.changeHTMLText("legend-units", "(" + units + ")");
+		CJ360.changeHTMLText("legend-units", "(" + units + ")", legendid);
 	    }
 	}
 };
 
 CJ360.clearCategoricalElements = function () {
-	var ul = document.getElementById("labels");
+	var ul = document.querySelector(".legend-labels");
 	if (ul) {
 		while (ul.firstChild) {
 			ul.removeChild(ul.firstChild);
@@ -64,9 +63,9 @@ CJ360.clearCategoricalElements = function () {
  * Clears everything in the legend for when a parameter is switched off.
  * @param{}
  */
-CJ360.clearLegend = function () {
-		CJ360.changeHTMLText("legend-title", "");
-		CJ360.changeHTMLText("legend-units", "");
+CJ360.clearLegend = function (legendid) {
+		CJ360.changeHTMLText("legend-title", "", legendid);
+		CJ360.changeHTMLText("legend-units", "", legendid);
 
 		CJ360.clearCategoricalElements();
 
@@ -91,13 +90,43 @@ CJ360.clearSelectors = function () {
  * @param {class} layer
  * @param {String} paramKey
  */
-CJ360.createLegend = function (cov, layer, paramKey) {
+CJ360.createLegend = function (cov, layer, paramKey, legendid) {
 	var param = cov.parameters.get(paramKey);
 	var allCategories = param.observedProperty.categories;
 
+	CJ360.initLegendTags(legendid);
+
 	if (!allCategories) {
-    return new CJ360.ContinousLegend(cov, layer, paramKey);
+    return new CJ360.ContinousLegend(cov, layer, paramKey, legendid);
   } else {
-    return new CJ360.CategoricalLegend(cov, layer, allCategories, paramKey);
+    return new CJ360.CategoricalLegend(cov, layer, allCategories, paramKey, legendid);
   }
+};
+
+CJ360.initLegendTags = function (legendid) {
+
+		var container = document.getElementById(legendid);
+
+		CJ360.createAndAddtoContainer(legendid, "legend-title", "div");
+		CJ360.createAndAddtoContainer(legendid, "legend-units", "div");
+		container.appendChild(document.createElement("br"));
+		CJ360.createAndAddtoContainer(legendid, "legend-bar", "div");
+		CJ360.createAndAddtoContainer(legendid, "legend-scale-continous", "div");
+		CJ360.createAndAddtoContainer("legend-scale-continous", "start", "div");
+		CJ360.createAndAddtoContainer("legend-scale-continous", "finish", "div");
+		CJ360.createAndAddtoContainer(legendid, "legend-scale-categorical", "div");
+		CJ360.createAndAddtoContainer("legend-scale-categorical", "legend-labels", "ul");
+
+};
+
+CJ360.createAndAddtoContainer = function (containerID, elemName, type) {
+
+	if(!document.getElementById(elemName)) {
+		var elem = document.createElement(type);
+		elem.className = elemName;
+		elem.id = elemName;
+		var container = document.getElementById(containerID);
+		container.appendChild(elem);
+	}
+
 };

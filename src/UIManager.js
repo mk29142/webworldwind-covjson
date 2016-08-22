@@ -1,11 +1,12 @@
 var CJ360 = window.CJ360 || {};
 
-CJ360.UIManager = function (wwd, cov, dom, param) {
+CJ360.UIManager = function (wwd, cov, dom, param, legName) {
   this._wwd = wwd;
   this._cov = cov;
   this._dom = dom;
   this._fullTime = "";
   this._param = param;
+  this._legendName = legName;
   var self = this;
 
   var timeAxis = dom.axes.get("t");
@@ -183,7 +184,7 @@ CJ360.UIManager.prototype.createLayer = function(options) {
     time: options.time,
     depth: options.depth
   }).on('load', function () {
-    this._legend = CJ360.createLegend(cov, layer, self._param);
+    this._legend = CJ360.createLegend(cov, layer, self._param, self._legendName);
   });
   return layer;
 };
