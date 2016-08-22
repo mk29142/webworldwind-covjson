@@ -1,5 +1,7 @@
+var CJ360 = window.CJ360 || {};
+
 // this function is taken from leaflet-coverage/src/layers/Grid.js#_getDomainBbox
-function getGridBbox (axes) {
+CJ360.getGridBbox = function(axes) {
   function extent (x, xBounds) {
     var xend = x.length - 1
     var xmin, xmax
@@ -42,40 +44,40 @@ function getGridBbox (axes) {
  * Checks to see if the categories have a
  * prefered colour associated with them.
  */
-function colourDefaultPresent (categories) {
+CJ360.colourDefaultPresent = function (categories) {
   return categories[0].preferredColor !== undefined
-}
+};
 
 /**
  * @param {Array} categories
  * creates a new palette with each of the
  * categories prefered colours and converts then to RGB format.
  */
-function loadDefaultPalette (categories) {
-  var newPalette = new Array(categories.length)
+CJ360.loadDefaultPalette = function (categories) {
+  var newPalette = new Array(categories.length);
 
   for (var i = 0; i < categories.length; i++) {
     newPalette[i] = categories[i].preferredColor.substr(1);
-  }
+  };
 
   return hexToRgb(newPalette);
-}
+};
 
 /**
  * @param {Array} categories
  * Categories don't have prefered colour so we use a
  * predefined palette.
  */
-function loadNewPalette (categories) {
+CJ360.loadNewPalette = function (categories) {
 
-  var numberOfCategories = categories.length
+  var numberOfCategories = categories.length;
 
   if (numberOfCategories < 12) {
-    return hexToRgb(palette('tol', numberOfCategories))
-  } else
-{     return hexToRgb(palette('tol-rainbow', numberOfCategories))
+    return hexToRgb(palette('tol', numberOfCategories));
+  } else {
+    return hexToRgb(palette('tol-rainbow', numberOfCategories));
   }
-}
+};
 
 /**
  * @param {Coverage} cov
@@ -86,19 +88,19 @@ function loadNewPalette (categories) {
  * a default palette will be picked.
  * Creates the grid bounding box and adds everything to the canvas.
  */
-var CovJSONGridLayer = function (cov, options) {
+CJ360.CovJSONGridLayer = function (cov, options) {
   this.options = options
   var self = this
   this.cov = cov
   this.paramKey = options.paramKey
 
-}
+};
 
-CovJSONGridLayer.prototype = Object.create(TiledCanvasLayer.prototype);
+CJ360.CovJSONGridLayer.prototype = Object.create(CJ360.TiledCanvasLayer.prototype);
 
-mixin(EventMixin, CovJSONGridLayer)
+CJ360.mixin(CJ360.EventMixin, CJ360.CovJSONGridLayer);
 
-CovJSONGridLayer.prototype.load = function () {
+CJ360.CovJSONGridLayer.prototype.load = function () {
   var self = this
 
   var constraints = {}
@@ -125,27 +127,27 @@ CovJSONGridLayer.prototype.load = function () {
       //and needs a range of similar colours, otherwise for
       //discrete values palette must have unique colours i.e no shades of the same colour
       if (!allCategories) {
-        self.palette = hexToRgb(palette('tol-dv', 1000))
+        self.palette = CJ360.hexToRgb(palette('tol-dv', 1000))
       } else {
-        if(colourDefaultPresent(allCategories)) {
-          self.palette = loadDefaultPalette(allCategories)
+        if(CJ360.colourDefaultPresent(allCategories)) {
+          self.palette = CJ360.loadDefaultPalette(allCategories)
         } else {
-          self.palette = loadNewPalette(allCategories)
+          self.palette = CJ360.loadNewPalette(allCategories)
         }
       }
-      var bbox = getGridBbox(self.domain.axes)
+      var bbox = CJ360.getGridBbox(self.domain.axes)
       self._bbox = bbox
 
-      TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256)
+      CJ360.TiledCanvasLayer.call(self, new WorldWind.Sector(bbox[1], bbox[3], bbox[0], bbox[2]), 256, 256)
 
       self.fire('load')
     })
   })
 
-  return this
-}
+  return this;
+};
 
-CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
+CJ360.CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
   var ctx = canvas.getContext('2d')
   var tileWidth = tile.tileWidth
   var tileHeight = tile.tileHeight
@@ -186,7 +188,7 @@ CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
         continue
       }
 
-      lon = wrapNum(lon, lonRange, true)
+      lon = CJ360.wrapNum(lon, lonRange, true)
       if (lon < lonMin || lon > lonMax) {
         continue
       }
@@ -197,7 +199,7 @@ CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
       var val = this.range.get({y: iLat, x: iLon})
 
       // find the right color in the palette
-      var colorIdx = scale(val, this.palette, this.paletteExtent)
+      var colorIdx = CJ360.scale(val, this.palette, this.paletteExtent)
       var color = this.palette[colorIdx]
       if (!color) {
         // out of scale
@@ -213,225 +215,72 @@ CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
   }
 
   ctx.putImageData(imgData, 0, 0)
-}
+};
 
 // from https://github.com/Leaflet/Leaflet/blob/master/src/core/Util.js
-function wrapNum (x, range, includeMax) {
-  var max = range[1]
-  var min = range[0]
-  var d = max - min
-  return x === max && includeMax ? x : ((x - min) % d + d) % d + min
-}
+CJ360.wrapNum = function (x, range, includeMax) {
+  var max = range[1];
+  var min = range[0];
+  var d = max - min;
+  return x === max && includeMax ? x : ((x - min) % d + d) % d + min;
+};
 
 /**
  * @param {Array} colors
  * array of hex colours without '#'.
  */
-function hexToRgb (colors) {
+CJ360.hexToRgb = function (colors) {
   return colors.map(function(color) {
-    var c = parseInt(color, 16)
-    return [c >> 16, (c >> 8) & 255, c & 255]
-  })
-}
+    var c = parseInt(color, 16);
+    return [c >> 16, (c >> 8) & 255, c & 255];
+  });
+};
 
-function scale (val, palette, extent) {
+CJ360.scale = function (val, palette, extent) {
   // scale val to [0,paletteSize-1] using the palette extent
   // (IDL bytscl formula: http://www.exelisvis.com/docs/BYTSCL.html)
-  var scaled = Math.trunc((palette.length - 1 + 0.9999) * (val - extent[0]) / (extent[1] - extent[0]))
-  return scaled
-}
+  var scaled = Math.trunc((palette.length - 1 + 0.9999) * (val - extent[0]) / (extent[1] - extent[0]));
+  return scaled;
+};
 
-var CovJSONVectorLayer = function (cov, options, type) {
+CJ360.CovJSONVectorLayer = function (cov, options, type) {
   this.options = options
   this.cov = cov
   this.paramKey = options.paramKey
   this.type = type
   this.load()
-  // TODO maybe convert coverage to GeoJSON and use GeoJSONParser, return RenderableLayer
-}
+};
 
-CovJSONVectorLayer.prototype = Object.create(WorldWind.RenderableLayer.prototype);
+CJ360.CovJSONVectorLayer.prototype = Object.create(WorldWind.RenderableLayer.prototype);
 
-mixin(EventMixin, CovJSONVectorLayer);
+CJ360.mixin(CJ360.EventMixin, CJ360.CovJSONVectorLayer);
 
-CovJSONVectorLayer.prototype.load = function() {
+CJ360.CovJSONVectorLayer.prototype.load = function() {
 
   var self = this
 
   switch (this.type) {
-    case "Point":
-      return this._loadPoint();
-    case "Trajectory":
-      return this._loadTrajectory();
+    case "Point": break;
+    case "Trajectory": break;
   }
-}
-
-CovJSONVectorLayer.prototype._loadPoint = function(options) {
-
-  var self = this;
-
-  this.cov.loadDomain().then(function(dom) {
-
-    var placemark,
-    placemarkAttributes = new WorldWind.PlacemarkAttributes(null),
-    highlightAttributes,
-    placemarkLayer = new WorldWind.RenderableLayer("Placemarks");
-
-    if(!options) {
-      latitude = dom.axes.get("y").values[0];
-      longitude = dom.axes.get("x").values[0];
-    } else {
-      latitude = options.y;
-      longitude = options.x;
-    }
-
-    // Set up the common placemark attributes.
-    placemarkAttributes.imageScale = 1;
-    placemarkAttributes.imageOffset = new WorldWind.Offset(
-      WorldWind.OFFSET_FRACTION, 0.5,
-      WorldWind.OFFSET_FRACTION, 0.5);
-    placemarkAttributes.imageColor = WorldWind.Color.WHITE;
-
-      // Create the custom image for the placemark.
-      var canvas = document.createElement("canvas"),
-      ctx2d = canvas.getContext("2d"),
-      size = 64, c = size / 2  - 0.5, innerRadius = 2.5, outerRadius = 10;
-
-      canvas.width = size;
-      canvas.height = size;
-
-      var param = self.cov.parameters.get(self.paramKey)
-      var allCategories = param.observedProperty.categories
-
-      if (!allCategories) {
-        self.palette = hexToRgb(palette('tol-dv', 1000))
-      } else {
-        if(colourDefaultPresent(allCategories)) {
-          self.palette = loadDefaultPalette(allCategories)
-        } else {
-          self.palette = loadNewPalette(allCategories)
-        }
-      }
-
-      self.cov.loadRange(self.paramKey).then(function(range) {
-        var val = CovUtils.minMaxOfRange(range);
-
-        var paletteExtent = allCategories ? val : [val[0] - 10, val[0] + 10];
-
-        var colourindex;
-        var colour;
-
-        if(!allCategories) {
-          colourindex = scale(val[0], self.palette, paletteExtent);
-          colour = self.palette[colourindex];
-        }else {
-          var arr = Array.from(param.categoryEncoding.values());
-          arr = arr.map(elem => elem[0]);
-
-          colourindex = arr.indexOf(val[0]);
-          colour = self.palette[colourindex];
-        }
-
-        var gradient = ctx2d.createRadialGradient(c, c, innerRadius, c, c, outerRadius);
-        gradient.addColorStop(0, createRGBString(colour));
-        ctx2d.fillStyle = gradient;
-        ctx2d.arc(c, c, outerRadius, 0, 2 * Math.PI, false);
-        ctx2d.fill();
-      });
-
-      // Create the placemark.
-      placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 1e2), false, null);
-      placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
-
-      // Create the placemark attributes for the placemark.
-      placemarkAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
-      // Wrap the canvas created above in an ImageSource object to specify it as the placemark image source.
-      placemarkAttributes.imageSource = new WorldWind.ImageSource(canvas);
-      placemark.attributes = placemarkAttributes;
-
-      // Create the highlight attributes for this placemark. Note that the normal attributes are specified as
-      // the default highlight attributes so that all properties are identical except the image scale. You could
-      // instead vary the color, image, or other property to control the highlight representation.
-      highlightAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
-      highlightAttributes.imageScale = 1.2;
-      placemark.highlightAttributes = highlightAttributes;
-
-      // Add the placemark to the layer.
-      placemarkLayer.addRenderable(placemark);
-      self.fire('load', placemarkLayer);
-  });
-    return this;
 };
 
-CovJSONVectorLayer.prototype._loadTrajectory = function() {
-
-  var self = this;
-  var polyLineLayer = new WorldWind.RenderableLayer("SurfacePolyLine");
-  var attributes = new WorldWind.ShapeAttributes(null);
-  var highlightAttributes;
-  var surfacePolyLine;
-
-  this.cov.loadDomain().then(function(dom) {
-    var axis = dom.axes.get("composite");
-    var latIndex = axis.components.indexOf("y");
-    var lonIndex = axis.components.indexOf("x");
-
-    var coord = [];
-    var lats = [];
-    var lons = [];
-
-    for(let i = 0; i < axis.values.length; i++) {
-      let x = axis.values[i][lonIndex];
-      let y = axis.values[i][latIndex];
-      let point = new WorldWind.Location(y, x);
-      coord.push(point);
-      lats.push(y);
-      lons.push(x);
-    }
-
-    var param = self.cov.parameters.get(self.paramKey);
-    var allCategories = param.observedProperty.categories;
-
-    if (!allCategories) {
-      self.palette = hexToRgb(palette('tol-dv', 1000))
-    } else {
-        if(colourDefaultPresent(allCategories)) {
-          self.palette = loadDefaultPalette(allCategories)
-        } else {
-          self.palette = loadNewPalette(allCategories)
-        }
-    }
-
-    for(let i = 0; i < lats.length; i++) {
-      var pointLayer = self._loadPoint({x: lons[i], y: lats[i]});
-      polyLineLayer.addRenderable(pointLayer);
-    }
-
-    surfacePolyLine = new WorldWind.SurfacePolyline(coord, null);
-    surfacePolyLine.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
-
-    polyLineLayer.addRenderable(surfacePolyLine);
-    self.fire("load", polyLineLayer);
-  });
-  return this;
-};
-
-var COVJSON_NS = 'http://covjson.org/def/domainTypes#'
-var CovJSONVectorDomainTypes = [
+CJ360.COVJSON_NS = 'http://covjson.org/def/domainTypes#';
+CJ360.CovJSONVectorDomainTypes = [
   'VerticalProfile','PointSeries','Point','MultiPointSeries','MultiPoint',
   'PolygonSeries','Polygon','MultiPolygonSeries','MultiPolygon','Trajectory',
   'Section'
-].map(function (name) { return COVJSON_NS + name })
+].map(function (name) { return CJ360.COVJSON_NS + name });
 
-var CovJSONLayer = function (cov, options) {
-  if (cov.domainType === COVJSON_NS + 'Grid') {
-    return new CovJSONGridLayer(cov, options)
-  } else if (CovJSONVectorDomainTypes.indexOf(cov.domainType) !== -1) {
-    var index = CovJSONVectorDomainTypes.indexOf(cov.domainType)
-    var endIndex = CovJSONVectorDomainTypes[index].indexOf("#")
-    var type = CovJSONVectorDomainTypes[index].substr(endIndex+1)
-    return new CovJSONVectorLayer(cov, options, type)
+CJ360.CovJSONLayer = function (cov, options) {
+  if (cov.domainType === CJ360.COVJSON_NS + 'Grid') {
+    return new CJ360.CovJSONGridLayer(cov, options)
+  } else if (CJ360.CovJSONVectorDomainTypes.indexOf(cov.domainType) !== -1) {
+    var index = CJ360.CovJSONVectorDomainTypes.indexOf(cov.domainType)
+    var endIndex = CJ360.CovJSONVectorDomainTypes[index].indexOf("#")
+    var type = CJ360.CovJSONVectorDomainTypes[index].substr(endIndex+1)
+    return new CJ360.CovJSONVectorLayer(cov, options, type)
   } else {
     throw new Error('Unsupported CovJSON domain type: ' + cov.domainType)
   }
-}
+};

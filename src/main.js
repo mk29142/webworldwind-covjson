@@ -29,25 +29,25 @@
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
 
-  CovJSON.read("testdata/multiTime.covjson").then(function (cov) {
+  CovJSON.read("testdata/grid.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
-      var ps = new ParamSelector(cov);
+      var ps = new CJ360.ParamSelector(cov);
 
-      var uiManager = new UIManager(wwd,cov,dom, cov.parameters.keys().next().value);
+      var uiManager = new CJ360.UIManager(wwd,cov,dom, cov.parameters.keys().next().value);
       var layer = uiManager.getLayer();
 
-      var popup = new Popup(wwd, cov, dom).display();
+      var popup = new CJ360.Popup(wwd, cov, dom).display();
 
       ps.on("change", function(val) {
         if(val == "off") {
-          clearLegend();
-          clearSelectors();
+          CJ360.clearLegend();
+          CJ360.clearSelectors();
           wwd.removeLayer(layer);
         }else {
           var legend = document.getElementById("my-legend");
           legend.style.visibility = "visible";
-          uiManager = new UIManager(wwd,cov,dom, val);
+          uiManager = new CJ360.UIManager(wwd, cov, dom, val);
           layer = uiManager.getLayer();
         }
       });

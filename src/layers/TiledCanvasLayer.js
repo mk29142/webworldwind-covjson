@@ -1,16 +1,18 @@
-var TiledCanvasLayer = function (sector, tileWidth, tileHeight, cachePath) {
+var CJ360 = window.CJ360 || {};
+
+CJ360.TiledCanvasLayer = function (sector, tileWidth, tileHeight, cachePath) {
   if(!cachePath) {
     cachePath = +new Date()
   }
   WorldWind.TiledImageLayer.call(this, sector, new WorldWind.Location(90, 180), 19, "image/x-canvas", cachePath, tileWidth, tileHeight);
 }
 
-TiledCanvasLayer.prototype = Object.create(WorldWind.TiledImageLayer.prototype);
+CJ360.TiledCanvasLayer.prototype = Object.create(WorldWind.TiledImageLayer.prototype);
 
 /**
 * overrides TiledImageLayer.prototype.retrieveTileImage
 */
-TiledCanvasLayer.prototype.retrieveTileImage = function (dc, tile, suppressRedraw) {
+CJ360.TiledCanvasLayer.prototype.retrieveTileImage = function (dc, tile, suppressRedraw) {
   if (this.currentRetrievals.indexOf(tile.imagePath) < 0) {
       if (this.absentResourceList.isResourceAbsent(tile.imagePath)) {
           return;

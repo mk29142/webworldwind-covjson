@@ -1,4 +1,6 @@
-function Popup(wwd, cov, dom) {
+var CJ360 = window.CJ360 || {};
+
+CJ360.Popup = function (wwd, cov, dom) {
   this._wwd = wwd;
   this._cov = cov;
   this._dom = dom;
@@ -9,7 +11,7 @@ function Popup(wwd, cov, dom) {
  * uses the lat and long coordinates of the click to find the data value at that point
  * and displays it in a box at that position.
  */
-Popup.prototype.display = function() {
+CJ360.Popup.prototype.display = function() {
 
   var self = this;
 
@@ -74,4 +76,4 @@ Popup.prototype.display = function() {
       });
     });
   });
-}
+};

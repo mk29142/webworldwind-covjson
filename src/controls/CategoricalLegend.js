@@ -1,10 +1,12 @@
+var CJ360 = window.CJ360 || {};
+
 /**
  * @param {String} tag
  * @param {Integer} colour (colour is in hex code)
  * Created a li object and a span for the colour of the
  * category and adds it to the main div in the html.
  */
-function addCategoricalElement(tag, colour) {
+CJ360.addCategoricalElement = function (tag, colour) {
 	var ul = document.getElementById("labels");
 	var li = document.createElement("li");
 	var span = document.createElement("span");
@@ -12,7 +14,7 @@ function addCategoricalElement(tag, colour) {
 	li.appendChild(span);
 	li.appendChild(document.createTextNode(tag));
 	ul.appendChild(li);
-}
+};
 
 /**
  * @param {Coverage} cov
@@ -24,11 +26,11 @@ function addCategoricalElement(tag, colour) {
  * Otherwise the category is associated with a colour from the palette which had random
  * colours assigned to it during initialisation.
  */
-function CategoricalLegend (cov, layer, categories, paramKey) {
+CJ360.CategoricalLegend = function (cov, layer, categories, paramKey) {
 
 	// var paramKey = cov.parameters.keys().next().value
 
-	clearCategoricalElements();
+	CJ360.clearCategoricalElements();
 
 	var legendBar = document.getElementById("legend-bar");
 	legendBar.style.display = "none";
@@ -36,16 +38,16 @@ function CategoricalLegend (cov, layer, categories, paramKey) {
 	var lsc = document.getElementById('legend-scale-continous');
 	lsc.style.display = "none";
 
-	changeTitleAndUnits(cov, paramKey);
+	CJ360.changeTitleAndUnits(cov, paramKey);
 
-	if (colourDefaultPresent(categories)) {
+	if (CJ360.colourDefaultPresent(categories)) {
 		for (var i = 0; i < categories.length; i++) {
-			addCategoricalElement(categories[i].label.en, categories[i].preferredColor);
+			CJ360.addCategoricalElement(categories[i].label.en, categories[i].preferredColor);
 		}
 	} else {
 		for(var i = 0; i < categories.length; i++) {
-			var colour = createRGBString(layer.palette[i]);
-			addCategoricalElement(categories[i].label.en, colour);
+			var colour = CJ360.createRGBString(layer.palette[i]);
+			CJ360.addCategoricalElement(categories[i].label.en, colour);
 		}
 	}
-}
+};

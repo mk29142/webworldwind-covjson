@@ -1,3 +1,5 @@
+var CJ360 = window.CJ360 || {};
+
 /**
  * Creates a Time and date drop down for the time values given.
  * And eventListener selects the values and fires the change to the EventMixin
@@ -5,7 +7,7 @@
  * @param {Array} values
  * @param {Object} options
  */
-function TimeSelector(values, options) {
+CJ360.TimeSelector = function (values, options) {
 	this._dateId = options.dateId;
 	this._timeId = options.timeId;
 	this._dateToTimeMap = {}
@@ -53,13 +55,13 @@ function TimeSelector(values, options) {
 		});
 
 	});
-}
+};
 
 /**
  * Given an array of dates it populates the date dropdown.
  * @param {Array} dateArr
  */
-TimeSelector.prototype._fillDateOptions = function(dateArr) {
+CJ360.TimeSelector.prototype._fillDateOptions = function(dateArr) {
 
 	var dateStamps = document.getElementById(this._dateId);
 
@@ -77,7 +79,7 @@ TimeSelector.prototype._fillDateOptions = function(dateArr) {
  * associated with it.
  * @param {Map} map
  */
-TimeSelector.prototype._fillTimeOptions = function (map) {
+CJ360.TimeSelector.prototype._fillTimeOptions = function (map) {
 
 	var dateStamps = document.getElementById(this._dateId);
 	var currDateVal = dateStamps.options[dateStamps.selectedIndex].value;
@@ -95,4 +97,4 @@ TimeSelector.prototype._fillTimeOptions = function (map) {
 	}
 };
 
-mixin(EventMixin, TimeSelector);
+CJ360.mixin(CJ360.EventMixin, CJ360.TimeSelector);

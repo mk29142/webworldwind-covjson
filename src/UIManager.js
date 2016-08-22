@@ -1,4 +1,6 @@
-function UIManager(wwd, cov, dom, param) {
+var CJ360 = window.CJ360 || {};
+
+CJ360.UIManager = function (wwd, cov, dom, param) {
   this._wwd = wwd;
   this._cov = cov;
   this._dom = dom;
@@ -9,12 +11,8 @@ function UIManager(wwd, cov, dom, param) {
   var timeAxis = dom.axes.get("t");
   var zaxis = dom.axes.get("z");
 
- var layer = this.createLayer({time: "", depth: ""});
-  layer.on('load', function (vectorLayer) {
-    vectorLayer ? self._wwd.addLayer(vectorLayer) : self._wwd.addLayer(layer);
-  }).load();
-  this._layer = layer;
   if(!timeAxis && !zaxis) {
+
     //creates the intial layer before any UI options are selected
     this._wwd.removeLayer(this._layer)
     layer = this.createLayer({time: "", depth: ""});
@@ -34,19 +32,20 @@ function UIManager(wwd, cov, dom, param) {
     this._layer = this.runSelectors(timeAxis, zaxis);
   }
 
-}
+};
+
 /**
  * Runs the time UI, firstly creates the layer based
  * on the initialised values in the boxes and then uses the event handler to
  * change the layer based on specfic time frame
  * @param {Object} timeAxis
  */
-UIManager.prototype.runTimeSelector = function (timeAxis) {
+CJ360.UIManager.prototype.runTimeSelector = function (timeAxis) {
   var self = this;
 
   var values = timeAxis.values;
 
-  timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"});
+  timeSelector = new CJ360.TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"});
 
   var dateStamps = document.getElementById("dateStamps");
   var timeStamps = document.getElementById("timeStamps");
@@ -55,7 +54,6 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
   var time = timeStamps.options[timeStamps.selectedIndex].value;
 
   var timeString;
-  // this._wwd.removeLayer(this._layer);
   if(time == "undefined") {
      timeString = date;
   } else {
@@ -78,7 +76,7 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
     this._fullTime = time;
   });
   return layer;
-}
+};
 
 /**
  * Runs the depth UI, firstly creates the layer based
@@ -86,7 +84,7 @@ UIManager.prototype.runTimeSelector = function (timeAxis) {
  * change the layer based on specfic depth
  * @param {Object} zaxis
  */
-UIManager.prototype.runDepthSelector = function(zaxis) {
+CJ360.UIManager.prototype.runDepthSelector = function(zaxis) {
   var self = this;
 
   if(!zaxis) {
@@ -99,13 +97,12 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
 
     var values = zaxis.values;
 
-    depthSelector = new DepthSelector(values, {zaxisID: "zaxis"});
+    depthSelector = new CJ360.DepthSelector(values, {zaxisID: "zaxis"});
 
     var depthStamps = document.getElementById("zaxis");
 
     var currDepth = depthStamps.options[depthStamps.selectedIndex].value;
 
-    // this._wwd.removeLayer(this._layer);
     var layer = this.createLayer({depth: currDepth})
     .on('load', function () {
       self._wwd.addLayer(layer)
@@ -122,15 +119,15 @@ UIManager.prototype.runDepthSelector = function(zaxis) {
     });
     return layer;
   }
-}
+};
 
-UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
+CJ360.UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
 
   var self = this;
 
   var values = timeAxis.values;
 
-  timeSelector = new TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"});
+  timeSelector = new CJ360.TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"});
 
   var dateStamps = document.getElementById("dateStamps");
   var timeStamps = document.getElementById("timeStamps");
@@ -140,7 +137,7 @@ UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
 
   var values = zaxis.values;
 
-  depthSelector = new DepthSelector(values, {zaxisID: "zaxis"});
+  depthSelector = new CJ360.DepthSelector(values, {zaxisID: "zaxis"});
 
   var depthStamps = document.getElementById("zaxis");
 
@@ -177,20 +174,20 @@ UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
  * and creates a legend for it
  * @param {Object} options
  */
-UIManager.prototype.createLayer = function(options) {
+CJ360.UIManager.prototype.createLayer = function(options) {
   var cov = this._cov;
   var self = this;
 
-  var layer = CovJSONLayer(cov, {
+  var layer = CJ360.CovJSONLayer(cov, {
     paramKey: this._param,
     time: options.time,
     depth: options.depth
   }).on('load', function () {
-    this._legend = createLegend(cov, layer, self._param);
+    this._legend = CJ360.createLegend(cov, layer, self._param);
   });
   return layer;
-}
+};
 
-UIManager.prototype.getLayer = function() {
+CJ360.UIManager.prototype.getLayer = function() {
   return this._layer;
-}
+};

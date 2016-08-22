@@ -1,20 +1,8 @@
+var CJ360 = window.CJ360 || {};
+
 /**
  * @external {Coverage} https://github.com/Reading-eScience-Centre/coverage-jsapi/blob/master/Coverage.md
  */
-
-/**
- * @param {String} id
- * @param {String} text
- *  Dynamically changes the text in an HTML
- *  div given by the id.
- */
-function changeHTMLText (id, text) {
-
-	// console.log(id);
-	var span = document.getElementById(id);
-	var	txt = document.createTextNode(text);
-	span.innerText = txt.textContent;
-}
 
 /**
  * @param {Coverage} cov
@@ -22,12 +10,12 @@ function changeHTMLText (id, text) {
  * Takes in the maximum and minimum values from the
  * continous data set and adds them to the legend.
  */
-function changeLegendScale(cov, minMax) {
+CJ360.changeLegendScale = function (cov, minMax) {
 
-	changeHTMLText("start", minMax[0]);
-	changeHTMLText("finish", minMax[1]);
+	CJ360.changeHTMLText("start", minMax[0]);
+	CJ360.changeHTMLText("finish", minMax[1]);
 
-}
+};
 
 /**
  * @param {Coverage} cov
@@ -36,24 +24,23 @@ function changeLegendScale(cov, minMax) {
  * like temperature by extracting the colours from the layer and the key information
  * of the cateogry from the Coverage object.
  */
-function ContinousLegend (cov, layer, paramKey) {
+CJ360.ContinousLegend = function (cov, layer, paramKey) {
 
 	// var paramKey = cov.parameters.keys().next().value
 	var palette = layer.palette;
 	var legend = document.getElementById("my-legend");
 	// console.log(cov.domainType
 
-
 	cov.loadRange(paramKey).then(function(range) {
 		var val = CovUtils.minMaxOfRange(range);
 		if(cov.domainType !== "http://covjson.org/def/domainTypes#Point") {
-			changeLegendScale(cov, val);
+			CJ360.changeLegendScale(cov, val);
 		} else {
-				changeLegendScale(cov, [val[0] - 10, val[0] + 10]);
+				CJ360.changeLegendScale(cov, [val[0] - 10, val[0] + 10]);
 		}
-})
+	});
 
-	changeTitleAndUnits(cov, paramKey);
+	CJ360.changeTitleAndUnits(cov, paramKey);
 
 	legend.style.display = "inline";
 
@@ -63,17 +50,17 @@ function ContinousLegend (cov, layer, paramKey) {
 	var lsc = document.getElementById('legend-scale-continous');
 	lsc.style.display = "inline";
 
-	clearCategoricalElements();
+	CJ360.clearCategoricalElements();
 
 	var colourString = "";
 
 	for (var i = 0; i < palette.length; i++) {
 		if (i !== palette.length - 1) {
-			colourString += createRGBString(palette[i]) + ",";
+			colourString += CJ360.createRGBString(palette[i]) + ",";
 		} else {
-			colourString += createRGBString(palette[i]);
+			colourString += CJ360.createRGBString(palette[i]);
 		}
 	}
 
 	legendBar.style.background = "linear-gradient(to top," + colourString + ")";
-}
+};

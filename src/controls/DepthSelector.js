@@ -1,5 +1,6 @@
+var CJ360 = window.CJ360 || {};
 
-function DepthSelector(values, options) {
+CJ360.DepthSelector = function (values, options) {
 	this._depthId = options.zaxisID;
 	var self = this;
 
@@ -10,12 +11,12 @@ function DepthSelector(values, options) {
 	depthStamps.addEventListener("change" , function() {
 		self.fire("change", {value: this.value});
 	});
-}
+};
 /**
  * Populates the dropdown menu for the depth
  * @param {Array} values
  */
-DepthSelector.prototype._fillDepthOptions = function (values) {
+CJ360.DepthSelector.prototype._fillDepthOptions = function (values) {
 
 	var depthStamps = document.getElementById(this._depthId);
 
@@ -29,4 +30,4 @@ DepthSelector.prototype._fillDepthOptions = function (values) {
 	}
 };
 
-mixin(EventMixin, DepthSelector);
+CJ360.mixin(CJ360.EventMixin, CJ360.DepthSelector);

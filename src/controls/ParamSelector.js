@@ -1,4 +1,6 @@
-function ParamSelector(cov) {
+var CJ360 = window.CJ360 || {};
+
+CJ360.ParamSelector = function (cov) {
   this._cov = cov;
   var paramUI = document.getElementById("paramUI");
   var self = this;
@@ -22,12 +24,12 @@ function ParamSelector(cov) {
       }
     });
   }
-}
+};
 
 /**
  * Creates a check box for each parameter in the coverageJSON file.
  */
-ParamSelector.prototype.initParams = function() {
+CJ360.ParamSelector.prototype.initParams = function() {
    var params = Array.from(this._cov.parameters.keys());
 
    var ps = document.getElementById("paramUI");
@@ -52,6 +54,6 @@ ParamSelector.prototype.initParams = function() {
 
    document.getElementById(params[0]).checked = true;
    this._paramKey = params[0];
- };
+};
 
-mixin(EventMixin, ParamSelector);
+CJ360.mixin(CJ360.EventMixin, CJ360.ParamSelector);
