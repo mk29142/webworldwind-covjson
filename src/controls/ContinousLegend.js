@@ -14,13 +14,12 @@ var CJ360 = window.CJ360 || {};
  CJ360.ContinousLegend = function (cov, layer, paramKey, legendid) {
 
 	 this._legendID = legendid;
-	 this._legendContainer = document.getElementById(legendid);
+	 this._legendContainer = document.querySelector("." + legendid);
 	 var self = this;
 
  	// var paramKey = cov.parameters.keys().next().value
  	var palette = layer.palette;
  	var legend = document.getElementById("my-legend");
- 	// console.log(cov.domainType
 
  	cov.loadRange(paramKey).then(function(range) {
  		var val = CovUtils.minMaxOfRange(range);

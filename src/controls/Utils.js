@@ -21,7 +21,7 @@ CJ360.createRGBString = function (colourValues) {
  *  div given by the id.
  */
 CJ360.changeHTMLText = function (id, text, legendid) {
-	var container = document.getElementById(legendid);
+	var container = document.querySelector("." + legendid);
 	var span = container.querySelector("." + id);
 	var	txt = document.createTextNode(text);
 	span.innerText = txt.textContent;
@@ -74,11 +74,11 @@ CJ360.clearLegend = function (legendid) {
 };
 
 CJ360.clearSelectors = function () {
-	var dateStamps = document.getElementById("dateStamps");
+	var dateStamps = document.querySelector(".dateStamps");
 	dateStamps.options.length = 0;
-	var timeStamps = document.getElementById("timeStamps");
+	var timeStamps = document.querySelector(".timeStamps");
 	timeStamps.options.length = 0;
-	var zaxis = document.getElementById("zaxis");
+	var zaxis = document.querySelector(".zaxis");
 	zaxis.options.length = 0;
 };
 
@@ -121,11 +121,10 @@ CJ360.initLegendTags = function (legendid) {
 
 CJ360.createAndAddtoContainer = function (containerID, elemName, type) {
 
-	if(!document.getElementById(elemName)) {
+	if(!document.querySelector("." + elemName)) {
 		var elem = document.createElement(type);
 		elem.className = elemName;
-		elem.id = elemName;
-		var container = document.getElementById(containerID);
+		var container = document.querySelector("." + containerID);
 		container.appendChild(elem);
 	}
 

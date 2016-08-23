@@ -4,7 +4,9 @@ CJ360.DepthSelector = function (values, options) {
 	this._depthId = options.zaxisID;
 	var self = this;
 
- 	var depthStamps = document.getElementById(this._depthId);
+	this._initTags();
+
+ 	var depthStamps = document.querySelector("." + this._depthId);
 
 	this._fillDepthOptions(values);
 
@@ -18,7 +20,7 @@ CJ360.DepthSelector = function (values, options) {
  */
 CJ360.DepthSelector.prototype._fillDepthOptions = function (values) {
 
-	var depthStamps = document.getElementById(this._depthId);
+	var depthStamps = document.querySelector("." + this._depthId);
 
 	depthStamps.options.length = 0;
 
@@ -28,6 +30,14 @@ CJ360.DepthSelector.prototype._fillDepthOptions = function (values) {
 		option.appendChild(document.createTextNode(values[i]));
 		depthStamps.appendChild(option);
 	}
+};
+
+CJ360.DepthSelector.prototype._initTags = function () {
+
+	CJ360.createAndAddtoContainer("depthUI", "depth", "div");
+	document.querySelector(".depth").appendChild(document.createTextNode("Depth"));
+	CJ360.createAndAddtoContainer("depthUI", "zaxis", "select");
+
 };
 
 CJ360.mixin(CJ360.EventMixin, CJ360.DepthSelector);

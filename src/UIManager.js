@@ -48,8 +48,8 @@ CJ360.UIManager.prototype.runTimeSelector = function (timeAxis) {
 
   timeSelector = new CJ360.TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"});
 
-  var dateStamps = document.getElementById("dateStamps");
-  var timeStamps = document.getElementById("timeStamps");
+  var dateStamps = document.querySelector(".dateStamps");
+  var timeStamps = document.querySelector(".timeStamps");
 
   var date = dateStamps.options[dateStamps.selectedIndex].value;
   var time = timeStamps.options[timeStamps.selectedIndex].value;
@@ -100,7 +100,7 @@ CJ360.UIManager.prototype.runDepthSelector = function(zaxis) {
 
     depthSelector = new CJ360.DepthSelector(values, {zaxisID: "zaxis"});
 
-    var depthStamps = document.getElementById("zaxis");
+    var depthStamps = document.querySelector(".zaxis");
 
     var currDepth = depthStamps.options[depthStamps.selectedIndex].value;
 
@@ -130,8 +130,8 @@ CJ360.UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
 
   timeSelector = new CJ360.TimeSelector(values, {dateId: "dateStamps", timeId: "timeStamps"});
 
-  var dateStamps = document.getElementById("dateStamps");
-  var timeStamps = document.getElementById("timeStamps");
+  var dateStamps = document.querySelector(".dateStamps");
+  var timeStamps = document.querySelector(".timeStamps");
 
   var date = dateStamps.options[dateStamps.selectedIndex].value;
   var time = timeStamps.options[timeStamps.selectedIndex].value;
@@ -140,7 +140,7 @@ CJ360.UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
 
   depthSelector = new CJ360.DepthSelector(values, {zaxisID: "zaxis"});
 
-  var depthStamps = document.getElementById("zaxis");
+  var depthStamps = document.querySelector(".zaxis");
 
   var currDepth = depthStamps.options[depthStamps.selectedIndex].value;
 

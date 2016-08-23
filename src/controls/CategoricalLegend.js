@@ -17,13 +17,13 @@ CJ360.CategoricalLegend = function (cov, layer, categories, paramKey, legendid) 
 
 	CJ360.clearCategoricalElements();
 
-	var legendBar = document.getElementById("legend-bar");
+	var legendBar = this._legendContainer.querySelector(".legend-bar");
 	legendBar.style.display = "none";
 
-	var lsc = document.getElementById('legend-scale-continous');
+	var lsc = this._legendContainer.querySelector('.legend-scale-continous');
 	lsc.style.display = "none";
 
-	CJ360.changeTitleAndUnits(cov, paramKey);
+	CJ360.changeTitleAndUnits(cov, paramKey, legendid);
 
 	if (CJ360.colourDefaultPresent(categories)) {
 		for (var i = 0; i < categories.length; i++) {

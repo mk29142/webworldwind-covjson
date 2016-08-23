@@ -13,8 +13,10 @@ CJ360.TimeSelector = function (values, options) {
 	this._dateToTimeMap = {}
 	var self = this;
 
- 	var dateStamps = document.getElementById(this._dateId);
- 	var timeStamps = document.getElementById(this._timeId);
+  this._initTags();
+
+ 	var dateStamps = document.querySelector("." + this._dateId);
+ 	var timeStamps = document.querySelector("." + this._timeId);
 
 	//Initialises the date drop down UI
 	// create date-> time map
@@ -63,7 +65,7 @@ CJ360.TimeSelector = function (values, options) {
  */
 CJ360.TimeSelector.prototype._fillDateOptions = function(dateArr) {
 
-	var dateStamps = document.getElementById(this._dateId);
+	var dateStamps = document.querySelector("." + this._dateId);
 
 	for(var i = 0; i < dateArr.length; i++) {
 		var option = document.createElement("option");
@@ -81,9 +83,9 @@ CJ360.TimeSelector.prototype._fillDateOptions = function(dateArr) {
  */
 CJ360.TimeSelector.prototype._fillTimeOptions = function (map) {
 
-	var dateStamps = document.getElementById(this._dateId);
+	var dateStamps = document.querySelector("." + this._dateId);
 	var currDateVal = dateStamps.options[dateStamps.selectedIndex].value;
-	var timeStamps = document.getElementById(this._timeId);
+	var timeStamps = document.querySelector("." + this._timeId);
 
 	timeStamps.options.length = 0;
 
@@ -95,6 +97,16 @@ CJ360.TimeSelector.prototype._fillTimeOptions = function (map) {
 		option.appendChild(document.createTextNode(times[i]));
 		timeStamps.appendChild(option);
 	}
+};
+
+CJ360.TimeSelector.prototype._initTags = function () {
+
+  CJ360.createAndAddtoContainer("timeUI", "time", "div");
+  document.querySelector(".time").appendChild(document.createTextNode("Time"));
+  CJ360.createAndAddtoContainer("timeUI", "dateStamps", "select");
+  CJ360.createAndAddtoContainer("timeUI", "timeStamps", "select");
+
+
 };
 
 CJ360.mixin(CJ360.EventMixin, CJ360.TimeSelector);
