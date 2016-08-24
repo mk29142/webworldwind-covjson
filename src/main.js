@@ -29,7 +29,7 @@
   // var file_name = getParameterByName('file_name');
   // console.log(file_name)
 
-  CovJSON.read("testdata/grid.covjson").then(function (cov) {
+  CovJSON.read("testdata/demo.covjson").then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
       var ps = new CJ360.ParamSelector(cov);
@@ -41,6 +41,7 @@
 
       ps.on("change", function(val) {
         if(val == "off") {
+          // console.log(layer);
           CJ360.clearLegend("my-legend");
           CJ360.clearSelectors();
           wwd.removeLayer(layer);
