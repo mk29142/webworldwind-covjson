@@ -17,18 +17,10 @@ var CJ360 = window.CJ360 || {};
 	 this._legendContainer = document.querySelector("." + legendid);
 	 var self = this;
 
- 	// var paramKey = cov.parameters.keys().next().value
  	var palette = layer.palette;
  	var legend = document.getElementById("my-legend");
+  this.changeLegendScale(cov, CovUtils.minMaxOfRange(layer.range));
 
- 	cov.loadRange(paramKey).then(function(range) {
- 		var val = CovUtils.minMaxOfRange(range);
- 		if(cov.domainType !== "http://covjson.org/def/domainTypes#Point") {
- 			self.changeLegendScale(cov, val);
- 		} else {
- 				self.changeLegendScale(cov, [val[0] - 10, val[0] + 10]);
- 		}
- })
 
  	CJ360.changeTitleAndUnits(cov, paramKey, this._legendID);
 

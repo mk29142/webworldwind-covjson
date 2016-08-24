@@ -102,7 +102,10 @@ CJ360.TimeSelector.prototype._fillTimeOptions = function (map) {
 CJ360.TimeSelector.prototype._initTags = function () {
 
   CJ360.createAndAddtoContainer("timeUI", "time", "div");
-  document.querySelector(".time").appendChild(document.createTextNode("Time"));
+  var time = document.querySelector(".time")
+	if(time.childNodes.length < 1) {
+		time.appendChild(document.createTextNode("Time"));
+	}
   CJ360.createAndAddtoContainer("timeUI", "dateStamps", "select");
   CJ360.createAndAddtoContainer("timeUI", "timeStamps", "select");
 

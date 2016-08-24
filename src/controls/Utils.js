@@ -75,11 +75,17 @@ CJ360.clearLegend = function (legendid) {
 
 CJ360.clearSelectors = function () {
 	var dateStamps = document.querySelector(".dateStamps");
-	dateStamps.options.length = 0;
+	if(dateStamps) {
+		dateStamps.options.length = 0;
+	}
 	var timeStamps = document.querySelector(".timeStamps");
-	timeStamps.options.length = 0;
+	if(timeStamps) {
+		timeStamps.options.length = 0;
+	}
 	var zaxis = document.querySelector(".zaxis");
-	zaxis.options.length = 0;
+	if(zaxis) {
+		zaxis.options.length = 0;
+	}
 };
 
 /**

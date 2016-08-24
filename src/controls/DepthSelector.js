@@ -35,7 +35,10 @@ CJ360.DepthSelector.prototype._fillDepthOptions = function (values) {
 CJ360.DepthSelector.prototype._initTags = function () {
 
 	CJ360.createAndAddtoContainer("depthUI", "depth", "div");
-	document.querySelector(".depth").appendChild(document.createTextNode("Depth"));
+	var depth = document.querySelector(".depth")
+	if(depth.childNodes.length < 1) {
+		depth.appendChild(document.createTextNode("Depth"));
+	}
 	CJ360.createAndAddtoContainer("depthUI", "zaxis", "select");
 
 };
