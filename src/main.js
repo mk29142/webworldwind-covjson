@@ -17,7 +17,7 @@
 
   var url = window.location.href;
   var filepath = url.split('#');
-  var fileName = "testdata/grid.covjson";
+  var fileName = "testdata/XYZLandcover.covjson";
 
   if(filepath[1]) {
     fileName = filepath[1];
