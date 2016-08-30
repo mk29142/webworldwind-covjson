@@ -108,15 +108,15 @@ CJ360.CovJSONGridLayer.prototype.load = function () {
   if(this.options.time) {
     constraints.t = this.options.time
   }
+
   //casting string to int since depth should be number not string
-  //need to change later (implement map)
   if(this.options.depth) {
     constraints.z = +this.options.depth
   }
 
   this.cov.subsetByValue(constraints).then(function(subsetCov) {
     Promise.all([subsetCov.loadDomain(), subsetCov.loadRange(self.paramKey)]).then(function (res) {
-      // console.log("here  " + constraints.t);
+
       self.domain = res[0]
       self.range = res[1]
 
@@ -199,7 +199,9 @@ CJ360.CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
       var val = this.range.get({y: iLat, x: iLon})
 
       // find the right color in the palette
-      var colorIdx = CJ360.scale(val, this.palette, this.paletteExtent)
+      if(val) {
+        var colorIdx = CJ360.scale(val, this.palette, this.paletteExtent)
+      }
       var color = this.palette[colorIdx]
       if (!color) {
         // out of scale
