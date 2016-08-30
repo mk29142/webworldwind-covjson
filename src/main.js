@@ -15,21 +15,24 @@
 
   window.wwd = wwd;
 
-  //
-  // function getParameterByName(name, url) {
-  //     if (!url) url = window.location.href;
-  //     name = name.replace(/[\[\]]/g, "\\$&");
-  //     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-  //         results = regex.exec(url);
-  //     if (!results) return null;
-  //     if (!results[2]) return '';
-  //     return decodeURIComponent(results[2].replace(/\+/g, " "));
-  // }
-  //
-  // var file_name = getParameterByName('file_name');
-  // console.log(file_name)
+  var url = window.location.href;
+  var filepath = url.split('#');
+  var fileName = "testdata/grid.covjson";
 
-  CovJSON.read("testdata/demo.covjson").then(function (cov) {
+  if(filepath[1]) {
+    fileName = filepath[1];
+    if(fileName == "1") {
+      fileName = "testdata/grid2.covjson"
+    } else if (fileName == "2") {
+      fileName = "testdata/multiTime.covjson"
+    } else if (fileName == "3") {
+      fileName = "http://godiva.rdg.ac.uk/ncWMS2/wms?FORMAT=application%2fprs.coverage+json&TRANSPARENT=TRUE&STYLES=default-categorical%2Fdefault&LAYERS=landcover%2Fland_cover&TIME=2011-01-01T00%3A00%3A00.000Z&COLORSCALERANGE=-0.5%2C23.5&NUMCOLORBANDS=250&ABOVEMAXCOLOR=0x000000&BELOWMINCOLOR=0x000000&BGCOLOR=transparent&LOGSCALE=false&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=-10.3639653512404,51.308827719008,2.5239024703849,59.196695540633&WIDTH=1500&HEIGHT=1500";
+    }else {
+      fileName = filepath[1];
+    }
+  }
+
+  CovJSON.read(fileName).then(function (cov) {
 
     cov.loadDomain().then(function(dom) {
       var ps = new CJ360.ParamSelector(cov);
