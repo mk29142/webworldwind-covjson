@@ -14,23 +14,23 @@ CJ360.UIManager = function (wwd, cov, dom, param, legName) {
 
   if(!timeAxis && !zaxis) {
 
-    //creates the intial layer before any UI options are selected
-    this._wwd.removeLayer(this._layer)
+    this._wwd.removeLayer(this._layer);
     layer = this.createLayer({time: "", depth: ""});
     layer.on('load', function (vectorLayer) {
       vectorLayer ? self._wwd.addLayer(vectorLayer) : self._wwd.addLayer(layer);
     }).load();
 
-    this._layer = layer
+    this._layer = layer;
+
   } else if(timeAxis && !zaxis) {
-    this._wwd.removeLayer(this._layer)
+    this._wwd.removeLayer(this._layer);
     this._layer = this.runTimeSelector(timeAxis);
   } else if(!timeAxis && zaxis) {
-    this._wwd.removeLayer(this._layer)
+    this._wwd.removeLayer(this._layer);
     this._layer = this.runDepthSelector(zaxis);
   } else {
-    this._wwd.removeLayer(this._layer)
-    this._layer = this.runSelectors(timeAxis, zaxis);
+     this._wwd.removeLayer(this._layer);
+     this.runSelectors(timeAxis, zaxis);
   }
 
 };
@@ -60,6 +60,7 @@ CJ360.UIManager.prototype.runTimeSelector = function (timeAxis) {
   } else {
     timeString = date + "T" + time;
   }
+
   var layer = this.createLayer({time: timeString})
   .on('load', function () {
     self._wwd.addLayer(layer);
@@ -154,7 +155,7 @@ CJ360.UIManager.prototype.runSelectors = function(timeAxis, zaxis) {
 
   timeSelector.on("change", function(time) {
 
-    self._wwd.addLayer(layer)
+    self._wwd.addLayer(layer);
 
     depthSelector.on("change", function(depth) {
 
@@ -192,3 +193,5 @@ CJ360.UIManager.prototype.createLayer = function(options) {
 CJ360.UIManager.prototype.getLayer = function() {
   return this._layer;
 };
+
+CJ360.mixin(CJ360.EventMixin, CJ360.UIManager);
