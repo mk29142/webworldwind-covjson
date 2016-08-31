@@ -17,14 +17,14 @@
 
   var url = window.location.href;
   var filepath = url.split('#');
-  var fileName = "testdata/XYZLandcover.covjson";
+  var fileName = "testdata/XYZLandCover.covjson";
 
   if(filepath[1]) {
     fileName = filepath[1];
     if(fileName == "1") {
-      fileName = "testdata/grid2.covjson"
-    } else if (fileName == "2") {
       fileName = "testdata/multiTime.covjson"
+    } else if (fileName == "2") {
+      fileName = "testdata/grid2.covjson"
     } else if (fileName == "3") {
       fileName = "testdata/demo.covjson";
     }else {
