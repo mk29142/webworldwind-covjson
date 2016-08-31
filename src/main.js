@@ -22,14 +22,14 @@
   if(filepath[1]) {
     fileName = filepath[1];
     if(fileName == "1") {
-      fileName = "testdata/multiTime.covjson"
+      fileName = "testdata/multiTime.covjson";
     } else if (fileName == "2") {
-      fileName = "testdata/grid2.covjson"
+      fileName = "testdata/grid2.covjson";
     } else if (fileName == "3") {
       fileName = "testdata/demo.covjson";
-    }else if (fileName == "4") {
-      fileName = "testdata/XYZLandcover.covjson"
-    }else {
+    } else if (fileName == "4") {
+      fileName = "testdata/XYZLandcover.covjson";
+    } else {
       fileName = filepath[1];
     }
   }
@@ -46,7 +46,6 @@
 
       ps.on("change", function(val) {
         if(val == "off") {
-          // console.log(layer);
           CJ360.clearLegend("my-legend");
           CJ360.clearSelectors();
           wwd.removeLayer(layer);
