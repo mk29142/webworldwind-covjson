@@ -199,20 +199,23 @@ CJ360.CovJSONGridLayer.prototype.drawCanvasTile = function (canvas, tile) {
       var val = this.range.get({y: iLat, x: iLon})
 
       // find the right color in the palette
+      var color
+      var alpha
       if(val) {
-        var colorIdx = CJ360.scale(val, this.palette, this.paletteExtent)
-      }
-      var color = this.palette[colorIdx]
-      if (!color) {
-        // out of scale
-        continue
+        var colorIdx = CJ360.scale(val, this.palette, this.paletteExtent);
+        color = this.palette[colorIdx]
+        alpha = 255
+      } else {
+        // We have a null value, so make the pixel transparent
+        color = [0,0,0]
+        alpha = 0
       }
 
       // and draw it
       rgba.set(tileY, tileX, 0, color[0])
       rgba.set(tileY, tileX, 1, color[1])
       rgba.set(tileY, tileX, 2, color[2])
-      rgba.set(tileY, tileX, 3, 255)
+      rgba.set(tileY, tileX, 3, alpha)
     }
   }
 
