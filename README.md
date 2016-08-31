@@ -8,5 +8,5 @@ WebWorldWind as the base to render the images on.
 
 For demo use: https://reading-escience-centre.github.io/webworldwind-covjson/
 
-and to view different files either type in #1 or #2 after the '/' for preset files or the # then your URL. 
+and to view different files either type in #1, 2, 3 or 4 after the '/' for preset files or the # then your URL. 
 URL must be https. 
